@@ -26,12 +26,12 @@ public class Sky implements Material {
 
 	@Override
 	public MaterialData getMaterialData(Vector3 position, Vector3 direction) {
-		MaterialData materialData = new MaterialData();
+		Color albedo;
 		if (direction.y > 0) {
-			materialData.albedo = Vector3.lerp(new Vector3(top), new Vector3(middle), direction.y).asColor();
-			return materialData;
+			albedo = Vector3.lerp(new Vector3(top), new Vector3(middle), direction.y).asColor();
+		} else {
+			albedo = Vector3.lerp(new Vector3(middle), new Vector3(bottom), direction.y + 1).asColor();
 		}
-		materialData.albedo = Vector3.lerp(new Vector3(middle), new Vector3(bottom), direction.y + 1).asColor();
-		return materialData;
+		return new MaterialData(albedo);
 	}
 }

@@ -46,7 +46,7 @@ public class Ray {
 
 		if (!hitForAlbedo) {
 			materialData = scene.getSkyMaterial().getMaterialData(position, direction);
-			return materialData.albedo;
+			return materialData.albedo();
 		}
 
 		materialData = scene.getMaterialData(this.position, this.direction);
@@ -59,21 +59,21 @@ public class Ray {
 		diffuseLight = applyPointLights(diffuseLight, materialData);
 		diffuseLight = applyDirectionalLight(diffuseLight, materialData);
 
-		Vector3 totalLight = Vector3.lerp(specularLight, diffuseLight, materialData.specularity);
+		Vector3 totalLight = Vector3.lerp(specularLight, diffuseLight, materialData.specularity());
 
-		return (new Vector3(materialData.albedo)).multiply(totalLight).asColor();
+		return (new Vector3(materialData.albedo())).multiply(totalLight).asColor();
 	}
 
 	private Vector3 applySpecularLight(Vector3 totalLight, MaterialData materialData, int recursionCount) {
 		Vector3 specularLight = new Vector3(0, 0, 0);
-		if (materialData.specularity > 0 && recursionCount > 0) {
+		if (materialData.specularity() > 0 && recursionCount > 0) {
 			for (int i = 0; i < RAYS_PER_REFLECTION; i++) {
 				Ray child = new Ray(position, calculateReflection(materialData), scene);
 				specularLight = specularLight.add(new Vector3(child.march(recursionCount - 1)));
 				stepsTaken += child.stepsTaken;
 			}
 			specularLight = specularLight.scale(1 / ((double) RAYS_PER_REFLECTION));
-			specularLight = specularLight.scale(materialData.specularity);
+			specularLight = specularLight.scale(materialData.specularity());
 		}
 		return totalLight.add(specularLight);
 	}
@@ -112,7 +112,7 @@ public class Ray {
 	}
 
 	Vector3 getWorldNormal(MaterialData materialData) {
-		return scene.getNormalAt(position).add(materialData.normalModifier).normalize();
+		return scene.getNormalAt(position).add(materialData.normalModifier()).normalize();
 	}
 
 	private Vector3 applyAmbientLight(Vector3 totalLight, MaterialData materialData) {

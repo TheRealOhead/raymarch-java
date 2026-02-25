@@ -4,25 +4,38 @@ import main.math.vectors.Vector3;
 
 import java.awt.*;
 
-public class MaterialData {
-	public Color albedo = null;
-	public Vector3 normalModifier = Vector3.ZERO;
-	public double specularity = 0;
-	public double scattering = 1;
-	public double opacity = 1;
-	public double refractiveIndex = 0;
+public record MaterialData(
+		Color albedo,
+		Vector3 normalModifier,
+		double specularity,
+		double scattering,
+		double opacity,
+		double refractiveIndex
+) {
 
+	public MaterialData(
+			Color albedo
+	) {
+		this(
+				albedo,
+				Vector3.ZERO,
+				0,
+				1,
+				1,
+				0
+		);
+	}
 
-	public MaterialData copy() {
-		MaterialData clone = new MaterialData();
-
-		clone.albedo = albedo;
-		clone.normalModifier = normalModifier;
-		clone.specularity = specularity;
-		clone.scattering = scattering;
-		clone.opacity = opacity;
-		clone.refractiveIndex = refractiveIndex;
-
-		return clone;
+	public MaterialData(
+			Color albedo,
+			double specularity) {
+		this(
+				albedo,
+				Vector3.ZERO,
+				specularity,
+				1,
+				1,
+				0
+		);
 	}
 }

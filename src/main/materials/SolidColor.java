@@ -5,10 +5,10 @@ import main.math.vectors.Vector3;
 import java.awt.*;
 
 public class SolidColor implements Material {
-	MaterialData materialData = new MaterialData();
+	private final MaterialData materialData;
 
 	public SolidColor(Color color) {
-		this.materialData.albedo = color;
+		this.materialData = new MaterialData(color);
 	}
 
 	@Override

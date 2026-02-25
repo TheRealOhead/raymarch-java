@@ -41,11 +41,11 @@ public class Camera {
 		data.color = ray.march(Ray.RECURSION_COUNT);
 
 		MaterialData materialData = ray.materialData;
-		data.albedo = materialData.albedo;
+		data.albedo = materialData.albedo();
 		data.depth = new Vector3(1 / ray.getDepth()).asColor();
 		data.normal = ray.getWorldNormal(materialData).add(Vector3.ONE).scale(.5).asColor();
 		data.stepCount = new Vector3(1 - ray.getStepsTaken() / Ray.MAX_STEPS).asColor();
-		data.normalModifications = ray.materialData.normalModifier.add(Vector3.ONE).scale(.5).asColor();
+		data.normalModifications = ray.materialData.normalModifier().add(Vector3.ONE).scale(.5).asColor();
 
 		return data;
 	}

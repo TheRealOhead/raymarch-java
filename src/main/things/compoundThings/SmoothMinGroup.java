@@ -6,6 +6,7 @@ import main.math.Mean;
 import main.math.vectors.Vector3;
 import main.things.Thing;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -56,7 +57,7 @@ public class SmoothMinGroup extends CompoundThing {
 
 	@Override
 	public MaterialData getMaterialData(Vector3 rayPosition, Vector3 rayDirection) {
-		MaterialData result = SmoothMinGroup.super.getMaterialData(rayPosition, rayDirection).copy();
+		MaterialData oldMaterial = SmoothMinGroup.super.getMaterialData(rayPosition, rayDirection);
 
 		LinkedList<Vector3> albedo = new LinkedList<>();
 
@@ -69,20 +70,27 @@ public class SmoothMinGroup extends CompoundThing {
 		for (Thing thing : SmoothMinGroup.this) {
 			MaterialData data = thing.getMaterialData(rayPosition, rayDirection);
 
-			albedo.add(new Vector3(data.albedo));
+			albedo.add(new Vector3(data.albedo()));
 
-			specularity.add(data.specularity);
+			specularity.add(data.specularity());
 
-			normal.add(data.normalModifier);
+			normal.add(data.normalModifier());
 
 			weights.add(1 / thing.sdf(rayPosition));
 		}
 
-		result.albedo = Mean.weightedRootMeanSquareOfVector3(albedo, weights).asColor();
-		result.specularity = Mean.weightedRootMeanSquare(specularity, weights);
+		Color newAlbedo = Mean.weightedRootMeanSquareOfVector3(albedo, weights).asColor();
+		double newSpecularity = Mean.weightedRootMeanSquare(specularity, weights);
+		Vector3 newNormalModifier = Mean.weightedRootMeanSquareOfVector3(normal, weights);
 
-		result.normalModifier = Mean.weightedRootMeanSquareOfVector3(normal, weights);
-		return result;
+		return new MaterialData(
+				newAlbedo,
+				newNormalModifier,
+				newSpecularity,
+				oldMaterial.scattering(),
+				oldMaterial.opacity(),
+				oldMaterial.refractiveIndex()
+		);
 	}
 
 }

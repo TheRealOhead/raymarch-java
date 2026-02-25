@@ -17,9 +17,16 @@ public class Rough implements Material {
 
 	@Override
 	public MaterialData getMaterialData(Vector3 position, Vector3 rayDirection) {
-		MaterialData data = baseMaterial.getMaterialData(position, rayDirection);
+		MaterialData oldData = baseMaterial.getMaterialData(position, rayDirection);
 		position = position.scale(1 / scale);
-		data.normalModifier = PerlinNoise.noise3D(position.x, position.y, position.z).scale(intensity);
-		return data;
+
+		return new MaterialData(
+				oldData.albedo(),
+				oldData.normalModifier().add(PerlinNoise.noise3D(position.x, position.y, position.z).scale(intensity)),
+				oldData.specularity(),
+				oldData.scattering(),
+				oldData.opacity(),
+				oldData.refractiveIndex()
+		);
 	}
 }

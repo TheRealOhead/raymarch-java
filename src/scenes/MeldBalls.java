@@ -29,15 +29,15 @@ public class MeldBalls extends Scene {
 				)
 		));
 
-		MaterialData reflectiveRed = new MaterialData();
+		MaterialData reflectiveRed = new MaterialData(
+				new Color(255, 0, 0),
+				.9
+		);
 
-		reflectiveRed.albedo = new Color(255, 0, 0);
-		reflectiveRed.specularity = .9;
-
-		MaterialData reflectiveGreen = new MaterialData();
-
-		reflectiveGreen.albedo = new Color(0, 255, 0);
-		reflectiveGreen.specularity = .9;
+		MaterialData reflectiveGreen = new MaterialData(
+				new Color(0, 255, 0),
+				.9
+		);
 
 		SmoothMinGroup balls = new SmoothMinGroup(Vector3.ZERO, 0.6);
 		//World balls = new World();

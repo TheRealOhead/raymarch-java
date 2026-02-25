@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class RadialTexture implements Material {
 
 	private final BufferedImage image;
-	private final MaterialData defaultMaterialData = new MaterialData();
+	private final MaterialData defaultMaterialData;
 	private final Vector2 offset;
 
 	public RadialTexture(BufferedImage image) {
@@ -17,9 +17,13 @@ public class RadialTexture implements Material {
 	}
 
 	public RadialTexture(BufferedImage image, Vector2 offset) {
-		this.defaultMaterialData.albedo = Color.MAGENTA;
+		this(image, offset, new MaterialData(Color.MAGENTA));
+	}
+
+	public RadialTexture(BufferedImage image, Vector2 offset, MaterialData defaultMaterialData) {
 		this.image = image;
 		this.offset = offset;
+		this.defaultMaterialData = defaultMaterialData;
 	}
 
 	public Vector2 mapSphereToSquare(Vector3 position) {
@@ -35,14 +39,20 @@ public class RadialTexture implements Material {
 				image.getWidth(),
 				image.getHeight()
 		)).toVector2();
-		MaterialData newMaterialData = defaultMaterialData.copy();
 
 		if (
 				uv.xInt() < image.getWidth() && uv.yInt() < image.getHeight() &&
 				uv.xInt() >= 0 && uv.yInt() >= 0
 		)
-			newMaterialData.albedo = new Color(image.getRGB(uv.xInt(), uv.yInt()));
+			return new MaterialData(
+					new Color(image.getRGB(uv.xInt(), uv.yInt())),
+					defaultMaterialData.normalModifier(),
+					defaultMaterialData.specularity(),
+					defaultMaterialData.scattering(),
+					defaultMaterialData.opacity(),
+					defaultMaterialData.refractiveIndex()
+			);
 
-		return newMaterialData;
+		return defaultMaterialData;
 	}
 }

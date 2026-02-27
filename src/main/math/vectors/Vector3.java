@@ -1,6 +1,7 @@
 package main.math.vectors;
 
 import java.awt.*;
+import java.util.Formattable;
 import java.util.Objects;
 
 /**
@@ -46,7 +47,27 @@ public class Vector3 {
 		);
 	}
 
-	public Vector3 subtract(Vector3 other) {
+    public static Vector3 getRandomUnitVectorInHemisphere(Vector3 hemisphere) {
+        Vector3 randomVector;
+        do {
+            randomVector = getRandomUnitVector();
+        } while (randomVector.dotProduct(hemisphere) > 0);
+        return randomVector;
+    }
+
+    public static Vector3 getRandomUnitVector() {
+        Vector3 randomVector;
+        do {
+            randomVector = new Vector3(
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1
+            );
+        } while (randomVector.magnitudeSquared() > 1);
+        return randomVector.normalize();
+    }
+
+    public Vector3 subtract(Vector3 other) {
 		return new Vector3(x - other.x, y - other.y, z - other.z);
 	}
 
@@ -100,7 +121,15 @@ public class Vector3 {
 		);
 	}
 
-	private interface Operation {
+    public Vector3 squared() {
+        return new Vector3(
+                x*x,
+                y*y,
+                z*z
+        );
+    }
+
+    private interface Operation {
 		double operate(double a, double b);
 	}
 

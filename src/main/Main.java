@@ -4,6 +4,7 @@ import main.io.ImageFiles;
 import main.gui.Canvas;
 import main.math.vectors.Vector2;
 import main.rendering.Camera;
+import main.scenes.BallInBox;
 import main.things.compoundThings.Scene;
 import main.scenes.Ocean;
 
@@ -19,12 +20,12 @@ public class Main {
      * Renders a single scene to a window in the center of the screen
      */
 	public static void main(String[] args) throws IOException {
-		Scene scene = new Ocean();
+		Scene scene = new BallInBox();
 
 		Camera camera = scene.getCamera();
 
 		Vector2 size = new Vector2(1024, 1024);
-		int threadCount = 64;
+		int threadCount = 256;
 
 		String path;
 		if (args.length > 0)

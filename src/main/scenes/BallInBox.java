@@ -5,8 +5,6 @@ import main.math.vectors.Vector3;
 import main.rendering.Camera;
 import main.optics.PointLightSource;
 import main.things.*;
-import main.things.compoundThings.CompoundThing;
-import main.things.compoundThings.SmoothMinGroup;
 import main.things.compoundThings.Scene;
 
 import java.awt.*;
@@ -60,19 +58,29 @@ public class BallInBox extends Scene {
 				)
 		));
 
-		CompoundThing water = new SmoothMinGroup(1);
-		add(water);
 
-		water.add(new Plane(
+		add(new Plane(
 				new Vector3(0, -1, 0),
 				Vector3.UP,
-				new Water(currentFrame)
+				new CheckerBoard(
+                        new SolidColor(new Color(29, 190, 243)),
+                        new SolidColor(new Color(23, 96, 120))
+                )
 		));
 
-		water.add(new Sphere(
+        add(new Plane(
+                new Vector3(0, 0, -1),
+                Vector3.NORTH,
+                new CheckerBoard(
+                        new SolidColor(new Color(231, 239, 9)),
+                        new SolidColor(new Color(149, 154, 18))
+                )
+        ));
+
+		add(new Sphere(
 				new Vector3(0.5, Math.sin(((double) currentFrame / numberOfFrames) * Math.PI * 2) * 2, 8),
 						1,
-				new Water(currentFrame)
+				new SandedSteel()
 		));
 
 		addPointLightSource(
@@ -95,23 +103,22 @@ public class BallInBox extends Scene {
 
 
 /*
-Ball in the Box by Alice in Method Chains
+    Ball in the Box by Alice in Method Chains
 
-I'm the ball in the box, buried in my SDF
-Won't you come and save me, save me?
-Feed my rays, can you output a fragment?
-Sun Microsystems, deny your maker
-He who tries, will be rendered
-Feed my rays, now you've outputted a fragment
-I'm the Object who gets referenced, shove my memory address in the garbage collector
-Won't you come and render me, render me?
-Feed my rays, can you output a fragment?
-Sun Microsystems, deny your maker
-He who tries, will be rendered
-Feed my rays, now you've outputted a fragment
-Feed my rays, can you output a fragment?
-Sun Microsystems, deny your maker
-He who tries, will be rendered
-Feed my rays, now you've outputted a fragment
-
- */
+    I'm the ball in the box, buried in my SDF
+    Won't you come and save me, save me?
+    Feed my rays, can you output a fragment?
+    Sun Microsystems, deny your maker
+    He who tries, will be rendered
+    Feed my rays, now you've outputted a fragment
+    I'm the Object who gets referenced, shove my memory address in the garbage collector
+    Won't you come and render me, render me?
+    Feed my rays, can you output a fragment?
+    Sun Microsystems, deny your maker
+    He who tries, will be rendered
+    Feed my rays, now you've outputted a fragment
+    Feed my rays, can you output a fragment?
+    Sun Microsystems, deny your maker
+    He who tries, will be rendered
+    Feed my rays, now you've outputted a fragment
+*/

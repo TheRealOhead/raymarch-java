@@ -29,7 +29,7 @@ public class Ray {
 	public final static double NORMAL_EPSILON = .01;
 
 	public static final int RECURSION_COUNT = 1;
-	private final static int RAYS_PER_REFLECTION = 1;
+	private final static int RAYS_PER_REFLECTION = 200;
 
 
 	public Ray(Vector3 position, Vector3 direction, Scene scene) {
@@ -70,18 +70,32 @@ public class Ray {
 	private Vector3 applySpecularLight(Vector3 totalLight, MaterialData materialData, int recursionCount) {
 		Vector3 specularLight = new Vector3(0, 0, 0);
 		if (materialData.specularity() > 0 && recursionCount > 0) {
-			for (int i = 0; i < RAYS_PER_REFLECTION; i++) {
-				Ray child = new Ray(position, calculateReflection(materialData), scene);
-				specularLight = specularLight.add(new Vector3(child.march(recursionCount - 1)));
-				stepsTaken += child.stepsTaken;
-			}
-			specularLight = specularLight.scale(1 / ((double) RAYS_PER_REFLECTION));
+
+            int numberOfProbeRays = RAYS_PER_REFLECTION;
+            if (materialData.scattering() <= 0)
+                numberOfProbeRays = 1; // If reflections are perfect, doing it multiple times will not change the result
+
+
+			specularLight = getMeanReflectedLight(materialData, numberOfProbeRays, recursionCount);
 			specularLight = specularLight.scale(materialData.specularity());
 		}
 		return totalLight.add(specularLight);
 	}
 
-	/**
+    /**
+     * Sends off a number of probe rays to get the color of specular light from a reflection
+     */
+    private Vector3 getMeanReflectedLight(MaterialData materialData, int numberOfProbeRays, int recursionCount) {
+        Vector3 specularLightTotal = Vector3.ZERO;
+        for (int i = 0; i < numberOfProbeRays; i++) {
+            Ray probeRay = new Ray(position, calculateReflection(materialData), scene);
+            specularLightTotal = specularLightTotal.add(new Vector3(probeRay.march(recursionCount - 1)).squared());
+            stepsTaken += probeRay.stepsTaken;
+        }
+        return specularLightTotal.scale(1 / ((double) numberOfProbeRays)).squareRoot();
+    }
+
+    /**
 	 * Takes the world normal into account to see what direction the ray would travel in if it were to reflect off of the world surface
 	 * @param materialData the materialData of the object being reflected off of
 	 * @return Facing normal post-reflection
@@ -93,10 +107,14 @@ public class Ray {
 		Vector3 modifiedNormal = getWorldNormal(materialData);
 		Vector3 modifiedReflection = direction.reflect(modifiedNormal);
 
-		double dotProduct = trueNormal.dotProduct(direction);
-		double modificationInfluence = -dotProduct;
 
-		return Vector3.lerp(trueReflection, modifiedReflection, modificationInfluence);
+        double dotProduct = trueNormal.dotProduct(direction);
+        double modificationInfluence = -dotProduct;
+
+        Vector3 diffuseReflection = Vector3.getRandomUnitVectorInHemisphere(modifiedNormal);
+        Vector3 specularReflection = Vector3.lerp(trueReflection, modifiedReflection, modificationInfluence);
+
+		return Vector3.lerp(specularReflection, diffuseReflection, materialData.scattering()).normalize();
 	}
 
 	private Vector3 applyDirectionalLight(Vector3 totalLight, MaterialData materialData) {

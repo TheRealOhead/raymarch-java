@@ -15,9 +15,19 @@ import main.things.compoundThings.Scene;
 import java.awt.*;
 
 public class MeldBalls extends Scene {
-	public MeldBalls() {
-		super();
+    @Override
+    public int getNumberOfFrames() {
+        return 32;
+    }
 
+    public MeldBalls() {
+        this(0);
+    }
+
+	public MeldBalls(int currentFrame) {
+		super(currentFrame);
+
+        double progress = (double) currentFrame / getNumberOfFrames();
 
 
 		add(new Plane(
@@ -43,13 +53,13 @@ public class MeldBalls extends Scene {
 		//World balls = new World();
 
 		balls.add(new Sphere(
-				new Vector3(-1, 0, 8),
+				new Vector3(Math.cos(progress * Math.PI * 2), 0, 8),
 				1,
 				new SolidMaterial(reflectiveRed)
 		));
 
 		balls.add(new Sphere(
-				new Vector3(1, 0, 8),
+				new Vector3(-Math.cos(progress * Math.PI * 2), 0, 8),
 				1,
 				new SolidMaterial(reflectiveGreen)
 		));

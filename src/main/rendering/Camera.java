@@ -70,7 +70,7 @@ public class Camera {
 
 	private static class FragmentJob {
 		Vector2 location;
-		Vector2 size;
+        Vector2 size;
 		FragmentJob(Vector2 location, Vector2 size) {
 			this.location = location;
 			this.size = size;

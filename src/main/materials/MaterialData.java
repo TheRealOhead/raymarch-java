@@ -20,7 +20,7 @@ public record MaterialData(
 				albedo,
 				Vector3.ZERO,
 				0,
-				1,
+				0,
 				1,
 				0
 		);
@@ -33,7 +33,7 @@ public record MaterialData(
 				albedo,
 				Vector3.ZERO,
 				specularity,
-				1,
+				0,
 				1,
 				0
 		);

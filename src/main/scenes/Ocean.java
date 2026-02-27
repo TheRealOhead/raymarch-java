@@ -7,11 +7,23 @@ import main.things.Plane;
 import main.things.compoundThings.Scene;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class Ocean extends Scene {
-	public Ocean() throws IOException {
+    private static BufferedImage skybox;
+
+    static {
+        try {
+            skybox = ImageIO.read(new File("./images/beach.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Ocean() throws IOException {
 		this(0);
 	}
 
@@ -31,6 +43,6 @@ public class Ocean extends Scene {
 				1
 		));
 
-		setSkyMaterial(new RadialTexture(ImageIO.read(new File("./images/beach.png"))));
+		setSkyMaterial(new RadialTexture(skybox));
 	}
 }

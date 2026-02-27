@@ -35,10 +35,17 @@ public class RadialTexture implements Material {
 
 	@Override
 	public MaterialData getMaterialData(Vector3 position, Vector3 rayDirection) {
-		Vector2 uv = mapSphereToSquare(position).multiply(new Vector2(
-				image.getWidth(),
-				image.getHeight()
-		)).toVector2();
+		Vector2 uv = mapSphereToSquare(position);
+
+        uv = new Vector2(
+                (uv.x + offset.x) % 1,
+                (uv.y + offset.y) % 1
+        );
+
+        uv = uv.multiply(new Vector2(
+                image.getWidth(),
+                image.getHeight()
+        )).toVector2();
 
 		if (
 				uv.xInt() < image.getWidth() && uv.yInt() < image.getHeight() &&

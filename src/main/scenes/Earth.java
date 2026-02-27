@@ -16,21 +16,31 @@ import java.io.File;
 import java.io.IOException;
 
 public class Earth extends Scene {
-	BufferedImage earthImage;
+	private static final BufferedImage earthImage;
 
-	@Override
+    static {
+        try {
+            earthImage = ImageIO.read(new File("./images/earth.jpg"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
 	public int getNumberOfFrames() {
-		return 16;
+		return 32;
 	}
 
-	public Earth(int frameNumber) throws IOException {
+    public Earth() throws IOException {
+        this(0);
+    }
 
-		earthImage = ImageIO.read(new File("./images/earth.jpg"));
+	public Earth(int frameNumber) throws IOException {
 
 		add(new Sphere(
 				new Vector3(0, 0, 5),
 				1,
-				new RadialTexture(earthImage, new Vector2((Math.PI * 2 * frameNumber / getNumberOfFrames()), 0))
+				new RadialTexture(earthImage, new Vector2(((double) frameNumber / getNumberOfFrames()), 0))
 		));
 
 		setCamera(new Camera(
@@ -39,10 +49,10 @@ public class Earth extends Scene {
 				1
 		));
 
-		setAmbientLight(new Color(19, 19, 19));
+		setAmbientLight(new Color(5, 5, 5));
 		setDirectionalLight(new DirectionalLightSource(
 				Color.WHITE,
-				new Vector3(.5, -1, .5)
+                Vector3.EAST.add(Vector3.NORTH)
 		));
 
 		setSkyMaterial(new SolidColor(Color.BLACK));

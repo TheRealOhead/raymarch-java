@@ -1,6 +1,8 @@
 package main;
 
 import main.io.ImageFiles;
+import main.scenes.Earth;
+import main.scenes.MeldBalls;
 import main.things.compoundThings.Scene;
 import main.scenes.Ocean;
 
@@ -12,7 +14,7 @@ import java.util.List;
 
 public class SaveGIF {
 	private static class FrameTracker {
-		private boolean active = true;
+		private volatile boolean active = true;
 		public void deactivate() {
 			active = false;
 		}
@@ -22,11 +24,13 @@ public class SaveGIF {
 	}
 
 	public static Scene getScene(int frameNumber) throws IOException {
-		return new Ocean(frameNumber);
+		return new Earth(frameNumber);
 	}
 
 	public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 		Scene scene = getScene(0);
+
+        long start = System.nanoTime();
 
 		int totalThreads = 32;
 		List<BufferedImage> images = new LinkedList<>();
@@ -46,6 +50,10 @@ public class SaveGIF {
 			while (frameTracker.isActive())
 				Thread.onSpinWait();
 		}
+
+        long end = System.nanoTime();
+
+        System.out.printf("Entire render took %dms%n", (end - start) / 1000000);
 
 		ImageFiles.saveImageBuffersToGif(images, "renders/" + scene.getClass().getSimpleName() + ".gif", 15);
 	}

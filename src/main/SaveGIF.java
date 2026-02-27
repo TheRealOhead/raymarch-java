@@ -1,9 +1,8 @@
+package main;
+
 import main.io.ImageFiles;
 import main.things.compoundThings.Scene;
-import scenes.BallInBox;
-import scenes.ColoredLights;
-import scenes.Earth;
-import scenes.Ocean;
+import main.scenes.Ocean;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class SaveGIF {
 
 			Scene finalScene = scene;
 			int finalI = i;
-			scene.getCamera().draw(image, totalThreads, () ->{
+			scene.getCamera().draw(image, totalThreads).thenRun(()->{
 				frameTracker.deactivate();
 				System.out.printf("Frame %d of %d complete%n", finalI + 1, finalScene.getNumberOfFrames());
 			});

@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Camera {
@@ -248,53 +249,43 @@ public class Camera {
 		));
 	}
 
-	private void forEachPixel(Vector2 size, PixelWriter pixelWriter, int threadCount, Runnable runWhenDone) {
-		ArrayList<FragmentJob> jobsArrayList = new ArrayList<>();
+	private CompletableFuture<Void> forEachPixel(Vector2 size, PixelWriter pixelWriter, int threadCount) {
+		return CompletableFuture.runAsync(() -> {
+            ArrayList<FragmentJob> jobsArrayList = new ArrayList<>();
 
-		addPixelsByDivideAndConquer(jobsArrayList, size);
+            addPixelsByDivideAndConquer(jobsArrayList, size);
 
-		ConcurrentLinkedDeque<FragmentJob> jobQueue = new ConcurrentLinkedDeque<>(jobsArrayList);
+            ConcurrentLinkedDeque<FragmentJob> jobQueue = new ConcurrentLinkedDeque<>(jobsArrayList);
 
-		for (int i = 0; i < threadCount; i++) {
-			new FragmentWorker("Fragment-Renderer-" + (i + 1), jobQueue, pixelWriter).start();
-		}
+            for (int i = 0; i < threadCount; i++) {
+                new FragmentWorker("Fragment-Renderer-" + (i + 1), jobQueue, pixelWriter).start();
+            }
 
-		Thread overseer = new Thread("Overseer") {
-			@Override
-			public void run() {
-				long start = System.nanoTime() / 1_000_000L;
-				waitForWorkersToFinish();
-				long end = System.nanoTime() / 1_000_000L;
-				System.out.printf("Completed render in %dms%n", end - start);
-				if (runWhenDone != null)
-					runWhenDone.run();
-			}
 
-			private void waitForWorkersToFinish() {
-				while (!jobQueue.isEmpty()) {
-					//System.out.println(jobQueue.size());
-					Thread.onSpinWait();
-				}
-			}
-		};
-
-		overseer.start();
-	}
+            long start = System.nanoTime() / 1_000_000L;
+            while (!jobQueue.isEmpty())
+                Thread.onSpinWait();
+            long end = System.nanoTime() / 1_000_000L;
+            System.out.printf("Completed render in %dms%n", end - start);
+        });
+    }
 
 
 	/**
-	 * Draws the camera's perspective to a swing component
-	 * @param g Graphics context
-	 * @param component JComponent to draw to
-	 * @param threadCount How many threads to use when drawing
-	 */
-	public void draw(Graphics g, JComponent component, int threadCount, Runnable runWhenDone) {
+     * Draws the camera's perspective to a swing component
+     *
+     * @param g           Graphics context
+     * @param component   JComponent to draw to
+     * @param threadCount How many threads to use when drawing
+     * @return
+     */
+	public CompletableFuture<Void> draw(Graphics g, JComponent component, int threadCount) {
 		Vector2 size = new Vector2(component.getWidth(), component.getHeight());
 
-		forEachPixel(size, (data, x, y) -> {
+		return forEachPixel(size, (data, x, y) -> {
 			g.setColor(data.color);
 			g.fillRect(x, y, 1, 1);
-		}, threadCount, runWhenDone);
+		}, threadCount);
 	}
 
 
@@ -303,34 +294,35 @@ public class Camera {
 	 * @param bufferedImage Image to draw to
 	 * @param threadCount How many threads to use when drawing
 	 */
-	public void draw(BufferedImage bufferedImage, int threadCount, Runnable runWhenDone) {
+	public CompletableFuture<Void> draw(BufferedImage bufferedImage, int threadCount) {
 		Vector2 size = new Vector2(bufferedImage.getWidth(), bufferedImage.getHeight());
-		forEachPixel(size, (data, x, y) -> bufferedImage.setRGB(x, y, data.color.getRGB()), threadCount, runWhenDone);
+		return forEachPixel(size, (data, x, y) -> bufferedImage.setRGB(x, y, data.color.getRGB()), threadCount);
 	}
 
 	/**
-	 * Outputs a lot of debug values to 6 different windows
-	 * @param product The normal output of the render
-	 * @param depth Depth value for each fragment
-	 * @param normals Normal for each fragment
-	 * @param threads Color coded which thread rendered this fragment
-	 * @param complexity How long it took to compute this fragment
-	 * @param stepCount How many marches it took to compute this fragment
-	 * @param threadCount How many threads to use
-	 */
-	public void debugViews(BufferedImage product,
-						   BufferedImage albedo,
-						   BufferedImage depth,
-						   BufferedImage normals,
-						   BufferedImage threads,
-						   BufferedImage complexity,
-						   BufferedImage stepCount,
-						   BufferedImage normalModifications,
-						   int threadCount,
-						   Runnable runWhenDone) {
+     * Outputs a lot of debug values to 6 different windows
+     *
+     * @param product     The normal output of the render
+     * @param depth       Depth value for each fragment
+     * @param normals     Normal for each fragment
+     * @param threads     Color coded which thread rendered this fragment
+     * @param complexity  How long it took to compute this fragment
+     * @param stepCount   How many marches it took to compute this fragment
+     * @param threadCount How many threads to use
+     * @return
+     */
+	public CompletableFuture<Void> debugViews(BufferedImage product,
+                                                BufferedImage albedo,
+                                                BufferedImage depth,
+                                                BufferedImage normals,
+                                                BufferedImage threads,
+                                                BufferedImage complexity,
+                                                BufferedImage stepCount,
+                                                BufferedImage normalModifications,
+                                                int threadCount) {
 		Vector2 size = new Vector2(product.getWidth(), product.getHeight());
 
-		forEachPixel(size,
+		return forEachPixel(size,
 				(data, x, y) -> {
 					product.setRGB(x, y, data.color.getRGB());
 					albedo.setRGB(x, y, data.albedo.getRGB());
@@ -341,6 +333,6 @@ public class Camera {
 					stepCount.setRGB(x, y, data.stepCount.getRGB());
 					normalModifications.setRGB(x, y, data.normalModifications.getRGB());
 				},
-				threadCount, runWhenDone);
+				threadCount);
 	}
 }

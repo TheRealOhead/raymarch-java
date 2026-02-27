@@ -1,6 +1,8 @@
+package main;
+
 import main.gui.DummyImage;
 import main.math.vectors.Vector2;
-import scenes.Ocean;
+import main.scenes.Ocean;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -20,9 +22,9 @@ public class DebugView {
 		BufferedImage complexity = Main.makeImageDisplayer("Time | Darker == Longer", 0, h, w, h);
 		BufferedImage albedo = Main.makeImageDisplayer("Albedo", w, h, w, h);
 		BufferedImage normalModifications = Main.makeImageDisplayer("Normal modifications", 2 * w, h, w, h);
-		BufferedImage stepsTaken = new DummyImage();//Main.makeImageDisplayer("Steps Taken | Darker == More", 2 * w, h, w, h);
+		BufferedImage stepsTaken = new DummyImage();//main.Main.makeImageDisplayer("Steps Taken | Darker == More", 2 * w, h, w, h);
 
-		BufferedImage threads = new DummyImage();//Main.makeImageDisplayer("Color-coded by Thread", 0, 0, w, h);
+		BufferedImage threads = new DummyImage();//main.Main.makeImageDisplayer("Color-coded by Thread", 0, 0, w, h);
 
 		new Ocean().getCamera().debugViews(
 				product,
@@ -34,8 +36,7 @@ public class DebugView {
 				stepsTaken,
 				normalModifications,
 
-				threadCount,
-				null
+				threadCount
 		);
 	}
 }

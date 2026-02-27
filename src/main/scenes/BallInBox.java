@@ -1,4 +1,4 @@
-package scenes;
+package main.scenes;
 
 import main.materials.*;
 import main.math.vectors.Vector3;

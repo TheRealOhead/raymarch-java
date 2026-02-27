@@ -1,9 +1,11 @@
+package main;
+
 import main.io.ImageFiles;
 import main.gui.Canvas;
 import main.math.vectors.Vector2;
 import main.optics.Camera;
 import main.things.compoundThings.Scene;
-import scenes.Ocean;
+import main.scenes.Ocean;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -19,7 +21,7 @@ public class Main {
 		Camera camera = scene.getCamera();
 
 		Vector2 size = new Vector2(1024, 1024);
-		int threadCount = 32;
+		int threadCount = 64;
 
 		String path;
 		if (args.length > 0)
@@ -33,7 +35,8 @@ public class Main {
 			formatName = "PNG";
 
 		BufferedImage image = makeImageDisplayer("Render", size.xInt(), size.yInt());
-		camera.draw(image, threadCount, () -> ImageFiles.saveImageBufferToFile(image, path, formatName));
+		camera.draw(image, threadCount)
+                .whenComplete((string, throwable) -> ImageFiles.saveImageBufferToFile(image, path, formatName));
 	}
 
 	static BufferedImage makeImageDisplayer(String title, int x, int y, int w, int h) {

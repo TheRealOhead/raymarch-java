@@ -1,4 +1,4 @@
-package scenes;
+package main.scenes;
 
 import main.materials.SolidColor;
 import main.math.vectors.Vector3;

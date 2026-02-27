@@ -2,7 +2,7 @@ package main.scenes;
 
 import main.materials.*;
 import main.math.vectors.Vector3;
-import main.optics.Camera;
+import main.rendering.Camera;
 import main.optics.PointLightSource;
 import main.things.*;
 import main.things.compoundThings.CompoundThing;

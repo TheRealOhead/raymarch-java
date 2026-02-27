@@ -4,7 +4,7 @@ import main.materials.RadialTexture;
 import main.materials.SolidColor;
 import main.math.vectors.Vector2;
 import main.math.vectors.Vector3;
-import main.optics.Camera;
+import main.rendering.Camera;
 import main.optics.DirectionalLightSource;
 import main.things.Sphere;
 import main.things.compoundThings.Scene;

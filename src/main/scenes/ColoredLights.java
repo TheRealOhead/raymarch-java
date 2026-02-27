@@ -2,7 +2,7 @@ package main.scenes;
 
 import main.materials.SolidColor;
 import main.math.vectors.Vector3;
-import main.optics.Camera;
+import main.rendering.Camera;
 import main.optics.PointLightSource;
 import main.things.Plane;
 import main.things.Sphere;

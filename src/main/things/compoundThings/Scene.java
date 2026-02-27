@@ -1,10 +1,10 @@
 package main.things.compoundThings;
 
 import main.math.vectors.Vector3;
-import main.optics.Camera;
+import main.rendering.Camera;
 import main.optics.DirectionalLightSource;
 import main.optics.PointLightSource;
-import main.optics.Ray;
+import main.rendering.Ray;
 import main.materials.Sky;
 import main.materials.Material;
 import main.things.Thing;

@@ -3,7 +3,7 @@ package main;
 import main.io.ImageFiles;
 import main.gui.Canvas;
 import main.math.vectors.Vector2;
-import main.optics.Camera;
+import main.rendering.Camera;
 import main.things.compoundThings.Scene;
 import main.scenes.Ocean;
 
@@ -15,6 +15,9 @@ import java.util.TimerTask;
 
 public class Main {
 
+    /**
+     * Renders a single scene to a window in the center of the screen
+     */
 	public static void main(String[] args) throws IOException {
 		Scene scene = new Ocean();
 
@@ -39,6 +42,15 @@ public class Main {
                 .whenComplete((string, throwable) -> ImageFiles.saveImageBufferToFile(image, path, formatName));
 	}
 
+    /**
+     * Creates a window that displays a BufferedImage
+     * @param title Title of window
+     * @param x Window X pos
+     * @param y Window Y pos
+     * @param w Window width
+     * @param h Window height
+     * @return BufferedImage being displayed
+     */
 	static BufferedImage makeImageDisplayer(String title, int x, int y, int w, int h) {
 		JFrame window = new JFrame();
 		window.setTitle(title);
@@ -71,10 +83,23 @@ public class Main {
 		return image;
 	}
 
-	private static BufferedImage makeImageDisplayer(String title, int w, int h) {
+    /**
+     * Creates a window that displays a BufferedImage in the center of the screen
+     * @param title Title of window
+     * @param w Window width
+     * @param h Window height
+     * @return BufferedImage being displayed
+     */
+	public static BufferedImage makeImageDisplayer(String title, int w, int h) {
 		return makeImageDisplayer(title, -1, -1, w, h);
 	}
 
+    /**
+     * Creates a BufferedImage
+     * @param width Image width
+     * @param height Image height
+     * @return Created image
+     */
 	static BufferedImage prepareBufferedImage(int width, int height) {
 		return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	}

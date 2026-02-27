@@ -1,4 +1,4 @@
-package main.optics;
+package main.rendering;
 
 import main.materials.MaterialData;
 import main.math.VarArgsMath;
@@ -38,18 +38,19 @@ public class Camera {
 
 		Ray ray = new Ray(position, direction, scene);
 
-		FragmentData data = new FragmentData();
+		Color resultColor = ray.march(Ray.RECURSION_COUNT);
+        MaterialData materialData = ray.materialData;
 
-		data.color = ray.march(Ray.RECURSION_COUNT);
-
-		MaterialData materialData = ray.materialData;
-		data.albedo = materialData.albedo();
-		data.depth = new Vector3(1 / ray.getDepth()).asColor();
-		data.normal = ray.getWorldNormal(materialData).add(Vector3.ONE).scale(.5).asColor();
-		data.stepCount = new Vector3(1 - ray.getStepsTaken() / Ray.MAX_STEPS).asColor();
-		data.normalModifications = ray.materialData.normalModifier().add(Vector3.ONE).scale(.5).asColor();
-
-		return data;
+        return new FragmentData(
+                resultColor,
+                materialData.albedo(),
+                new Vector3(1 / ray.getDepth()).asColor(),
+                ray.getWorldNormal(materialData).add(Vector3.ONE).scale(.5).asColor(),
+                null,
+                null,
+                new Vector3(1 - ray.getStepsTaken() / Ray.MAX_STEPS).asColor(),
+                ray.materialData.normalModifier().add(Vector3.ONE).scale(.5).asColor()
+        );
 	}
 
 	private FragmentData getDataAt(Vector2 screenPosition, Vector2 size) {
@@ -76,18 +77,7 @@ public class Camera {
 		}
 	}
 
-	private static class FragmentData {
-		Color color;
-		Color albedo;
-		Color depth;
-		Color normal;
-		Color thread;
-		Color complexity;
-		Color stepCount;
-		Color normalModifications;
-	}
-
-	/**
+    /**
 	 * Takes a set of coordinates that has yet to be rendered, and renders it!
 	 */
 	private class FragmentWorker extends Thread {
@@ -128,8 +118,17 @@ public class Camera {
 
 				double timeTook = endTime - startTime;
 
-				data.thread = this.debugColor;
-				data.complexity = new Vector3(10000 / timeTook).asColor();
+                data = new FragmentData(
+                        data.color(),
+                        data.albedo(),
+                        data.depth(),
+                        data.normal(),
+                        this.debugColor,
+                        new Vector3(10000 / timeTook).asColor(),
+                        data.stepCount(),
+                        data.normalModifications()
+                );
+
 				writer.run(
 						data,
 						(int) job.location.x,
@@ -283,7 +282,7 @@ public class Camera {
 		Vector2 size = new Vector2(component.getWidth(), component.getHeight());
 
 		return forEachPixel(size, (data, x, y) -> {
-			g.setColor(data.color);
+			g.setColor(data.color());
 			g.fillRect(x, y, 1, 1);
 		}, threadCount);
 	}
@@ -296,7 +295,7 @@ public class Camera {
 	 */
 	public CompletableFuture<Void> draw(BufferedImage bufferedImage, int threadCount) {
 		Vector2 size = new Vector2(bufferedImage.getWidth(), bufferedImage.getHeight());
-		return forEachPixel(size, (data, x, y) -> bufferedImage.setRGB(x, y, data.color.getRGB()), threadCount);
+		return forEachPixel(size, (data, x, y) -> bufferedImage.setRGB(x, y, data.color().getRGB()), threadCount);
 	}
 
 	/**
@@ -324,14 +323,14 @@ public class Camera {
 
 		return forEachPixel(size,
 				(data, x, y) -> {
-					product.setRGB(x, y, data.color.getRGB());
-					albedo.setRGB(x, y, data.albedo.getRGB());
-					depth.setRGB(x, y, data.depth.getRGB());
-					normals.setRGB(x, y, data.normal.getRGB());
-					threads.setRGB(x, y, data.thread.getRGB());
-					complexity.setRGB(x, y, data.complexity.getRGB());
-					stepCount.setRGB(x, y, data.stepCount.getRGB());
-					normalModifications.setRGB(x, y, data.normalModifications.getRGB());
+					product.setRGB(x, y, data.color().getRGB());
+					albedo.setRGB(x, y, data.albedo().getRGB());
+					depth.setRGB(x, y, data.depth().getRGB());
+					normals.setRGB(x, y, data.normal().getRGB());
+					threads.setRGB(x, y, data.thread().getRGB());
+					complexity.setRGB(x, y, data.complexity().getRGB());
+					stepCount.setRGB(x, y, data.stepCount().getRGB());
+					normalModifications.setRGB(x, y, data.normalModifications().getRGB());
 				},
 				threadCount);
 	}

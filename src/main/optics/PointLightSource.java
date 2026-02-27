@@ -1,6 +1,7 @@
 package main.optics;
 
 import main.math.vectors.Vector3;
+import main.rendering.Ray;
 import main.things.compoundThings.Scene;
 
 import java.awt.*;

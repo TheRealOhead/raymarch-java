@@ -5,7 +5,7 @@ import main.materials.MaterialData;
 import main.materials.SolidColor;
 import main.materials.SolidMaterial;
 import main.math.vectors.Vector3;
-import main.optics.Camera;
+import main.rendering.Camera;
 import main.optics.DirectionalLightSource;
 import main.things.Plane;
 import main.things.compoundThings.SmoothMinGroup;

@@ -1,7 +1,10 @@
-package main.optics;
+package main.rendering;
 
 import main.materials.MaterialData;
 import main.math.vectors.Vector3;
+import main.optics.DirectionalLightSource;
+import main.optics.LightUtils;
+import main.optics.PointLightSource;
 import main.things.compoundThings.Scene;
 
 import java.awt.*;
@@ -117,7 +120,7 @@ public class Ray {
 		return totalLight;
 	}
 
-	Vector3 getWorldNormal(MaterialData materialData) {
+	public Vector3 getWorldNormal(MaterialData materialData) {
 		return scene.getNormalAt(position).add(materialData.normalModifier()).normalize();
 	}
 
@@ -129,7 +132,7 @@ public class Ray {
 	 * Sends a ray off in the direction it's facing
 	 * @return Whether it hit anything
 	 */
-	boolean cast() {
+    public boolean cast() {
 		stepFixedDistance(ESCAPE_EPSILON);
 		for (int step = 0; step < MAX_STEPS; step++) {
 			if (stepAsFarAsPossible())

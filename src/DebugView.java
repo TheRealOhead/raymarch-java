@@ -1,6 +1,6 @@
 import main.gui.DummyImage;
 import main.math.vectors.Vector2;
-import scenes.SingleTriangle;
+import scenes.Ocean;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class DebugView {
 
 		BufferedImage threads = new DummyImage();//Main.makeImageDisplayer("Color-coded by Thread", 0, 0, w, h);
 
-		new SingleTriangle().getCamera().debugViews(
+		new Ocean().getCamera().debugViews(
 				product,
 				albedo,
 				depth,

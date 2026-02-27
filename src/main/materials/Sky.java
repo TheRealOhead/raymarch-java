@@ -28,9 +28,9 @@ public class Sky implements Material {
 	public MaterialData getMaterialData(Vector3 position, Vector3 direction) {
 		Color albedo;
 		if (direction.y > 0) {
-			albedo = Vector3.lerp(new Vector3(top), new Vector3(middle), direction.y).asColor();
+			albedo = Vector3.lerp(new Vector3(middle), new Vector3(top), direction.y).asColor();
 		} else {
-			albedo = Vector3.lerp(new Vector3(middle), new Vector3(bottom), direction.y + 1).asColor();
+			albedo = Vector3.lerp(new Vector3(bottom), new Vector3(middle), direction.y + 1).asColor();
 		}
 		return new MaterialData(albedo);
 	}

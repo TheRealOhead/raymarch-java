@@ -20,4 +20,8 @@ public final class VarArgsMath {
 	public static double clamp(double value, double min, double max) {
 		return Math.min(max, Math.max(value, min));
 	}
+
+	public static double log2(double value) {
+		return Math.log(value) / Math.log(2);
+	}
 }

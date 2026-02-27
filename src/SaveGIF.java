@@ -3,6 +3,7 @@ import main.things.compoundThings.Scene;
 import scenes.BallInBox;
 import scenes.ColoredLights;
 import scenes.Earth;
+import scenes.Ocean;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class SaveGIF {
 	}
 
 	public static Scene getScene(int frameNumber) throws IOException {
-		return new Earth(frameNumber);
+		return new Ocean(frameNumber);
 	}
 
 	public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {

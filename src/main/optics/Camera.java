@@ -1,6 +1,7 @@
 package main.optics;
 
 import main.materials.MaterialData;
+import main.math.VarArgsMath;
 import main.math.vectors.Vector2;
 import main.math.vectors.Vector3;
 import main.things.compoundThings.Scene;
@@ -137,57 +138,120 @@ public class Camera {
 		}
 	}
 
-	private void forEachPixel(Vector2 size, PixelWriter pixelWriter, int threadCount, Runnable runWhenDone) {
-		ArrayList<FragmentJob> jobsArrayList = new ArrayList<>();
-
-		/*
-		// Add fragments by powers of two
+	private void addPixelsByPowersOf2(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
 		int totalFragments = size.xInt() * size.yInt();
 		int powerOfTwo = (int) Math.ceil(Math.log(totalFragments) / Math.log(2));
 		while (powerOfTwo >= 0) {
 			for (int i = 0; i < totalFragments; i += (int) Math.pow(2, powerOfTwo)) {
-				jobsArrayList.add(new FragmentJob(new Vector2(i / size.xInt(), i % size.xInt()), size));
+				int x = i / size.xInt();
+				int y = i % size.yInt();
+				addJob(jobsArrayList, x, y, size);
 			}
 			powerOfTwo--;
 		}
-		*/
+	}
 
-		/*
-		// Add pixels from left to right
+	private ArrayList<FragmentJob> getPixelsByDivideAndConquer(Vector2 size, int x, int y, int s) {
+		ArrayList<FragmentJob> list = new ArrayList<>();
+
+		if (s > 1) {
+			int halfS = s / 2;
+
+			list.addAll(getPixelsByDivideAndConquer(size, x, y, halfS)); // Top left
+			list.addAll(getPixelsByDivideAndConquer(size, x + halfS, y, halfS)); // Top right
+			list.addAll(getPixelsByDivideAndConquer(size, x, y + halfS, halfS)); // Bottom left
+			list.addAll(getPixelsByDivideAndConquer(size, x + halfS, y + halfS, halfS)); // Bottom right
+		}
+
+		if (s <= 1 && x < size.xInt() && y < size.yInt())
+			list.add(new FragmentJob(new Vector2(x, y), size));
+
+		return list;
+	}
+
+	private void addPixelsByDivideAndConquer(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
+		jobsArrayList.addAll(getPixelsByDivideAndConquer(size, 0, 0, Math.max(
+					(int) Math.pow(2, Math.ceil(VarArgsMath.log2(size.xInt()))),
+					(int) Math.pow(2, Math.ceil(VarArgsMath.log2(size.yInt())))
+				)
+		));
+	}
+
+	private void addPixelsLeftToRight(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
 		for (int x = 0; x < size.x; x++) {
 			for (int y = 0; y < size.y; y++) {
-				jobsArrayList.add(new FragmentJob(
-						new Vector2(x, y),
-						size
-				));
+				addJob(jobsArrayList, x, y, size);
 			}
 		}
-		*/
+	}
 
-
-		// Add pixels from top to bottom
+	private void addPixelsFromTopToBottom(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
 		for (int y = 0; y < size.y; y++) {
 			for (int x = 0; x < size.x; x++) {
-				jobsArrayList.add(new FragmentJob(
-						new Vector2(x, y),
-						size
-				));
+				addJob(jobsArrayList, x, y, size);
 			}
 		}
+	}
 
-
-
-
-
-		// Shuffle fragments in queue
+	private void addPixelsShuffled(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
+		addPixelsFromTopToBottom(jobsArrayList, size);
 		for (int i = 0; i < jobsArrayList.size(); i++) {
 			FragmentJob temp = jobsArrayList.get(i);
 			int random = (int) (Math.random() * jobsArrayList.size());
 			jobsArrayList.set(i, jobsArrayList.get(random));
 			jobsArrayList.set(random, temp);
 		}
+	}
 
+	private void addPixelsSpiral(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
+		int x = 0;
+		int y = 0;
 
+		for (int i = 0; i < size.xInt() * size.yInt(); i++) {
+			// Right
+			for (; x < size.xInt() - i; x++) {
+				addJob(jobsArrayList, x, y, size);
+			}
+			x--;
+
+			// Down
+			for (; y < size.yInt() - i; y++) {
+				addJob(jobsArrayList, x, y, size);
+			}
+			y--;
+
+			// Left
+			for (; x >= i; x--) {
+				addJob(jobsArrayList, x, y, size);
+			}
+			x++;
+
+			// Up
+			for (; y >= i + 1; y--) {
+				addJob(jobsArrayList, x, y, size);
+			}
+			y++;
+		}
+	}
+
+	private void addPixelsSpiralInverse(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
+		addPixelsSpiral(jobsArrayList, size);
+		ArrayList<FragmentJob> reversed = new ArrayList<>(jobsArrayList.reversed());
+		jobsArrayList.clear();
+		jobsArrayList.addAll(reversed);
+	}
+
+	private void addJob(ArrayList<FragmentJob> jobsArrayList, int x, int y, Vector2 size) {
+		jobsArrayList.add(new FragmentJob(
+				new Vector2(x, y),
+				size
+		));
+	}
+
+	private void forEachPixel(Vector2 size, PixelWriter pixelWriter, int threadCount, Runnable runWhenDone) {
+		ArrayList<FragmentJob> jobsArrayList = new ArrayList<>();
+
+		addPixelsByDivideAndConquer(jobsArrayList, size);
 
 		ConcurrentLinkedDeque<FragmentJob> jobQueue = new ConcurrentLinkedDeque<>(jobsArrayList);
 

@@ -8,13 +8,11 @@ public class Water extends Rough {
 			.9
 	);
 
-	public Water() {
-		this( .25, .1);
+	public Water(int frame) {
+		this( .25, .1, 1, frame);
 	}
 
-	public Water(double scale, double intensity) {
-		super(new SolidMaterial(defaultMaterialData), scale, intensity);
+	public Water(double scale, double intensity, double speed, int frame) {
+		super(new SolidMaterial(defaultMaterialData), scale, intensity, frame * speed / 100);
 	}
-
-
 }

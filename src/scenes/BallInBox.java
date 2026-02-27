@@ -66,13 +66,13 @@ public class BallInBox extends Scene {
 		water.add(new Plane(
 				new Vector3(0, -1, 0),
 				Vector3.UP,
-				new Water()
+				new Water(currentFrame)
 		));
 
 		water.add(new Sphere(
 				new Vector3(0.5, Math.sin(((double) currentFrame / numberOfFrames) * Math.PI * 2) * 2, 8),
 						1,
-				new Water()
+				new Water(currentFrame)
 		));
 
 		addPointLightSource(

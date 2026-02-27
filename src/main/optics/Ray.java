@@ -25,7 +25,7 @@ public class Ray {
 	public final static double ESCAPE_EPSILON = .001;
 	public final static double NORMAL_EPSILON = .01;
 
-	public static final int RECURSION_COUNT = 2;
+	public static final int RECURSION_COUNT = 1;
 	private final static int RAYS_PER_REFLECTION = 1;
 
 
@@ -59,7 +59,7 @@ public class Ray {
 		diffuseLight = applyPointLights(diffuseLight, materialData);
 		diffuseLight = applyDirectionalLight(diffuseLight, materialData);
 
-		Vector3 totalLight = Vector3.lerp(specularLight, diffuseLight, materialData.specularity());
+		Vector3 totalLight = Vector3.lerp(diffuseLight, specularLight, materialData.specularity());
 
 		return (new Vector3(materialData.albedo())).multiply(totalLight).asColor();
 	}
@@ -84,10 +84,16 @@ public class Ray {
 	 * @return Facing normal post-reflection
 	 */
 	private Vector3 calculateReflection(MaterialData materialData) {
-		Vector3 normal = getWorldNormal(materialData);
-		// Equation from https://www.sunshine2k.de/articles/coding/vectorreflection/vectorreflection.html
-		// R = D - N * (N dotprod D)
-		return direction.subtract(normal.scale(2 * direction.dotProduct(normal))).normalize();
+		Vector3 trueNormal = scene.getNormalAt(position);
+		Vector3 trueReflection = direction.reflect(trueNormal);
+
+		Vector3 modifiedNormal = getWorldNormal(materialData);
+		Vector3 modifiedReflection = direction.reflect(modifiedNormal);
+
+		double dotProduct = trueNormal.dotProduct(direction);
+		double modificationInfluence = -dotProduct;
+
+		return Vector3.lerp(trueReflection, modifiedReflection, modificationInfluence);
 	}
 
 	private Vector3 applyDirectionalLight(Vector3 totalLight, MaterialData materialData) {
@@ -125,9 +131,7 @@ public class Ray {
 	 */
 	boolean cast() {
 		stepFixedDistance(ESCAPE_EPSILON);
-		int step;
-		for (step = 0; step < MAX_STEPS; step++) {
-
+		for (int step = 0; step < MAX_STEPS; step++) {
 			if (stepAsFarAsPossible())
 				break;
 		}

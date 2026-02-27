@@ -3,7 +3,7 @@ import main.gui.Canvas;
 import main.math.vectors.Vector2;
 import main.optics.Camera;
 import main.things.compoundThings.Scene;
-import scenes.SingleTriangle;
+import scenes.Ocean;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -14,7 +14,7 @@ import java.util.TimerTask;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Scene scene = new SingleTriangle();
+		Scene scene = new Ocean();
 
 		Camera camera = scene.getCamera();
 

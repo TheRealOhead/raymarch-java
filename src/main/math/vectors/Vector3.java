@@ -20,6 +20,10 @@ public class Vector3 {
 	public static final Vector3 EAST = new Vector3(1, 0, 0);
 	public static final Vector3 WEST = new Vector3(-1, 0, 0);
 
+	public static final Vector3 ROLL  = new Vector3(Math.PI * 2, 0, 0);
+	public static final Vector3 YAW   = new Vector3(0, Math.PI * 2, 0);
+	public static final Vector3 PITCH = new Vector3(0, 0, Math.PI * 2);
+
 	public Vector3(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
@@ -134,9 +138,9 @@ public class Vector3 {
 
 	public static Vector3 lerp(Vector3 pointA, Vector3 pointB, double t) {
 		return new Vector3(
-				(pointA.x * t) + ((1 - t) * pointB.x),
-				(pointA.y * t) + ((1 - t) * pointB.y),
-				(pointA.z * t) + ((1 - t) * pointB.z)
+				(pointA.x * (1 - t)) + (t * pointB.x),
+				(pointA.y * (1 - t)) + (t * pointB.y),
+				(pointA.z * (1 - t)) + (t * pointB.z)
 		);
 	}
 
@@ -177,6 +181,12 @@ public class Vector3 {
 		);
 
 		return rotated;
+	}
+
+	public Vector3 reflect(Vector3 normal) {
+		// Equation from https://www.sunshine2k.de/articles/coding/vectorreflection/vectorreflection.html
+		// R = D - N * (N dot D)
+		return subtract(normal.scale(2 * dotProduct(normal))).normalize();
 	}
 
 	@Override

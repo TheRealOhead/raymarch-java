@@ -53,7 +53,7 @@ public class Camera {
         );
 	}
 
-	private FragmentData getDataAt(Vector2 screenPosition, Vector2 size) {
+	FragmentData getDataAt(Vector2 screenPosition, Vector2 size) {
 		Vector2 uv = screenPosition.scale(1 / (size.x)).subtract(new Vector3(.5)).toVector2();
 
 		uv = new Vector2(uv.x, -uv.y);

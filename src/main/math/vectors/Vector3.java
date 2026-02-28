@@ -3,6 +3,7 @@ package main.math.vectors;
 import java.awt.*;
 import java.util.Formattable;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * An immutable 3D vector of doubles
@@ -59,9 +60,9 @@ public class Vector3 {
         Vector3 randomVector;
         do {
             randomVector = new Vector3(
-                    Math.random() * 2 - 1,
-                    Math.random() * 2 - 1,
-                    Math.random() * 2 - 1
+                    ThreadLocalRandom.current().nextDouble() * 2 - 1,
+                    ThreadLocalRandom.current().nextDouble() * 2 - 1,
+                    ThreadLocalRandom.current().nextDouble() * 2 - 1
             );
         } while (randomVector.magnitudeSquared() > 1);
         return randomVector.normalize();

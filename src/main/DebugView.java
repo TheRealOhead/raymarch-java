@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class DebugView {
 	public static void main(String[] args) throws IOException {
-		Vector2 size = new Vector2(800, 800);
+		Vector2 size = new Vector2(600, 600);
 
 		int threadCount = 32;
 
@@ -26,7 +26,7 @@ public class DebugView {
 
 		BufferedImage threads = new DummyImage();//main.Main.makeImageDisplayer("Color-coded by Thread", 0, 0, w, h);
 
-		new Ocean().getCamera().debugViews(
+		Main.getDefaultScene().getCamera().debugViews(
 				product,
 				albedo,
 				depth,

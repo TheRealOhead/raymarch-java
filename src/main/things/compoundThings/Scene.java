@@ -30,7 +30,7 @@ public class Scene extends CompoundThing {
 		return numberOfFrames;
 	}
 
-	DirectionalLightSource directionalLightSource = null;
+	Set<DirectionalLightSource> directionalLightSources = new HashSet<>();
 
 	private Camera camera = null;
 
@@ -51,8 +51,8 @@ public class Scene extends CompoundThing {
 		super(position);
 	}
 
-	public void setDirectionalLight(DirectionalLightSource directionalLightSource) {
-		this.directionalLightSource = directionalLightSource;
+	public void addDirectionalLight(DirectionalLightSource directionalLightSource) {
+		this.directionalLightSources.add(directionalLightSource);
 	}
 
 	public void setSkyMaterial(Material material) {
@@ -62,8 +62,8 @@ public class Scene extends CompoundThing {
 		return this.skyMaterial;
 	}
 
-	public DirectionalLightSource getDirectionalLight() {
-		return directionalLightSource;
+	public Set<DirectionalLightSource> getDirectionalLights() {
+		return directionalLightSources;
 	}
 
 	private Color ambientLight = new Color(124, 124, 124);

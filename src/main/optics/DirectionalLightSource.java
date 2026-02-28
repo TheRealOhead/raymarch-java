@@ -15,7 +15,7 @@ public class DirectionalLightSource {
 
 	public DirectionalLightSource(Color color, Vector3 normal) {
 		this.color = color;
-		this.normal = normal;
+		this.normal = normal.normalize();
 	}
 
 	public Vector3 getNormal() {

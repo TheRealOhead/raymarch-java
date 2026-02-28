@@ -7,8 +7,8 @@ public class Mirror extends SolidMaterial {
 	public Mirror() {
 		super(null);
 		super.materialData = new MaterialData(
-				new Color(255, 255, 255),
-				1
+				new Color(200, 240, 200),
+                .95
 		);
 	}
 }

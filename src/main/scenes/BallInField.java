@@ -35,6 +35,6 @@ public class BallInField extends Scene {
 				1
 		));
 
-		setDirectionalLight(DirectionalLightSource.DEFAULT);
+		addDirectionalLight(DirectionalLightSource.DEFAULT);
 	}
 }

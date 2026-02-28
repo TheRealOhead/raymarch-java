@@ -72,6 +72,6 @@ public class MeldBalls extends Scene {
 				1
 		));
 
-		setDirectionalLight(new DirectionalLightSource(Color.WHITE, new Vector3(-1, -1, 1)));
+		addDirectionalLight(new DirectionalLightSource(Color.WHITE, new Vector3(-1, -1, 1)));
 	}
 }

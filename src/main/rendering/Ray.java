@@ -8,6 +8,7 @@ import main.optics.PointLightSource;
 import main.things.compoundThings.Scene;
 
 import java.awt.*;
+import java.util.Set;
 
 public class Ray {
 	private Vector3 position;
@@ -28,7 +29,7 @@ public class Ray {
 	public final static double ESCAPE_EPSILON = .001;
 	public final static double NORMAL_EPSILON = .01;
 
-	public static final int RECURSION_COUNT = 1;
+	public static final int RECURSION_COUNT = 16;
 	private final static int RAYS_PER_REFLECTION = 200;
 
 
@@ -60,7 +61,7 @@ public class Ray {
 		Vector3 diffuseLight = Vector3.ZERO;
 		diffuseLight = applyAmbientLight(diffuseLight, materialData);
 		diffuseLight = applyPointLights(diffuseLight, materialData);
-		diffuseLight = applyDirectionalLight(diffuseLight, materialData);
+		diffuseLight = applyDirectionalLightSources(diffuseLight, materialData);
 
 		Vector3 totalLight = Vector3.lerp(diffuseLight, specularLight, materialData.specularity());
 
@@ -117,11 +118,23 @@ public class Ray {
 		return Vector3.lerp(specularReflection, diffuseReflection, materialData.scattering()).normalize();
 	}
 
-	private Vector3 applyDirectionalLight(Vector3 totalLight, MaterialData materialData) {
-		DirectionalLightSource directionalLightSource = scene.getDirectionalLight();
-		if (directionalLightSource == null) return totalLight;
+    private Vector3 applyDirectionalLightSources(Vector3 totalLight, MaterialData materialData) {
+        Vector3 directionalLight = Vector3.ZERO;
 
-		Ray secondaryProbe = new Ray(position, directionalLightSource.getNormal().negate(), scene);
+        Set<DirectionalLightSource> directionalLights = scene.getDirectionalLights();
+        if (directionalLights.size() == 0) return totalLight.add(directionalLight);
+        if (directionalLights.size() == 1) return totalLight.add(getDirectionalLight(directionalLights.iterator().next(), materialData));
+
+        for (DirectionalLightSource lightSource : directionalLights) {
+            directionalLight = directionalLight.add(getDirectionalLight(lightSource, materialData).squared());
+        }
+
+        return totalLight.add(directionalLight.squareRoot());
+    }
+
+	private Vector3 getDirectionalLight(DirectionalLightSource directionalLightSource, MaterialData materialData) {
+		Vector3 totalLight = Vector3.ZERO;
+        Ray secondaryProbe = new Ray(position, directionalLightSource.getNormal().negate(), scene);
 		if (!secondaryProbe.cast())
 			totalLight = LightUtils.applyLight(
 					totalLight,

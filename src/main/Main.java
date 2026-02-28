@@ -4,11 +4,8 @@ import main.io.ImageFiles;
 import main.gui.Canvas;
 import main.math.vectors.Vector2;
 import main.rendering.Camera;
-import main.scenes.BallInBox;
-import main.scenes.Earth;
-import main.scenes.MeldBalls;
+import main.scenes.*;
 import main.things.compoundThings.Scene;
-import main.scenes.Ocean;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -18,11 +15,19 @@ import java.util.TimerTask;
 
 public class Main {
 
+    public static Scene getDefaultScene(int frameNumber) {
+        return new ColoredLights(frameNumber);
+    }
+
+    public static Scene getDefaultScene() {
+        return getDefaultScene(0);
+    }
+
     /**
      * Renders a single scene to a window in the center of the screen
      */
 	public static void main(String[] args) throws IOException {
-		Scene scene = new MeldBalls();
+		Scene scene = getDefaultScene();
 
 		Camera camera = scene.getCamera();
 

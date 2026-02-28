@@ -50,7 +50,7 @@ public class Earth extends Scene {
 		));
 
 		setAmbientLight(new Color(5, 5, 5));
-		setDirectionalLight(new DirectionalLightSource(
+		addDirectionalLight(new DirectionalLightSource(
 				Color.WHITE,
                 Vector3.EAST.add(Vector3.NORTH)
 		));

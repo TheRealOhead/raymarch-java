@@ -23,12 +23,8 @@ public class SaveGIF {
 		}
 	}
 
-	public static Scene getScene(int frameNumber) throws IOException {
-		return new Earth(frameNumber);
-	}
-
 	public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-		Scene scene = getScene(0);
+		Scene scene = Main.getDefaultScene(0);
 
         long start = System.nanoTime();
 
@@ -36,7 +32,7 @@ public class SaveGIF {
 		List<BufferedImage> images = new LinkedList<>();
 		for (int i = 0; i < scene.getNumberOfFrames(); i++) {
 			FrameTracker frameTracker = new FrameTracker();
-			scene = getScene(i);
+			scene = Main.getDefaultScene(i);
 			BufferedImage image = Main.prepareBufferedImage(256, 256);
 			images.add(image);
 

@@ -15,11 +15,11 @@ import java.util.TimerTask;
 
 public class Main {
 
-    public static Scene getDefaultScene(int frameNumber) {
+    public static Scene getDefaultScene(int frameNumber) throws IOException {
         return new ColoredLights(frameNumber);
     }
 
-    public static Scene getDefaultScene() {
+    public static Scene getDefaultScene() throws IOException {
         return getDefaultScene(0);
     }
 

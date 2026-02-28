@@ -39,6 +39,7 @@ public class Earth extends Scene {
 
 		add(new Sphere(
 				new Vector3(0, 0, 5),
+                Vector3.ZERO,
 				1,
 				new RadialTexture(earthImage, new Vector2(((double) frameNumber / getNumberOfFrames()), 0))
 		));

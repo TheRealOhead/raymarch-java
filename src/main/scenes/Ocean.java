@@ -33,6 +33,7 @@ public class Ocean extends Scene {
 
 		add(new Plane(
 				new Vector3(0, -2, 0),
+                Vector3.ZERO,
 				Vector3.UP,
 				new Water(1, .5, 10, currentFrame)
 		));

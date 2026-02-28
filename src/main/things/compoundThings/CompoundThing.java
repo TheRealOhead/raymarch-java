@@ -10,24 +10,22 @@ public abstract class CompoundThing extends Thing {
 		super();
 	}
 
-	public CompoundThing(Vector3 position) {
-		super(position);
+	public CompoundThing(Vector3 position, Vector3 rotation) {
+		super(position, rotation);
 	}
 
 	private Thing getClosestThing(Vector3 position) {
-		position = position.subtract(getPosition());
-
 		Thing closestThingSoFar = null;
 		double closestThingSoFarDistance = 0;
 		for (Thing thing : this) {
 
 			if (closestThingSoFar == null) {
 				closestThingSoFar = thing;
-				closestThingSoFarDistance = closestThingSoFar.sdf(position);
+				closestThingSoFarDistance = closestThingSoFar.getDistanceFrom(position);
 				continue;
 			}
 
-			double thingDistance = thing.sdf(position);
+			double thingDistance = thing.getDistanceFrom(position);
 
 			if (closestThingSoFarDistance > thingDistance) {
 				closestThingSoFar = thing;
@@ -40,7 +38,7 @@ public abstract class CompoundThing extends Thing {
 
 	@Override
 	public double sdf(Vector3 position) {
-		return getClosestThing(position).sdf(position.subtract(getPosition()));
+		return getClosestThing(position).getDistanceFrom(position);
 	}
 
 	@Override

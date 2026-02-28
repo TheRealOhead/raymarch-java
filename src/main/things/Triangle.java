@@ -9,8 +9,8 @@ public class Triangle extends Thing {
 	Vector3[] points;
 	Material material;
 
-	public Triangle(Vector3 p1, Vector3 p2, Vector3 p3, Material material) {
-		super(Vector3.ZERO);
+	public Triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 position, Vector3 rotation, Material material) {
+		super(position, rotation);
 
 		this.points = new Vector3[] {p1, p2, p3};
 

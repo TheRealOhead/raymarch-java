@@ -8,8 +8,9 @@
 - [X] ~~Write my own implementation~~ of Perlin noise and stop using code from 2002
     - I ended up using a library for 4D noise
 - [X] Allow multiple directional lights per scene
-- [ ] Make things rotatable
+- [X] Make things rotatable
 - [ ] Make things able to be joined and xor'd and all that
+- [ ] Add linear textures
 - [ ] Make scene building more consistent
   - Good place to start is making a `build()` method instead of doing the building directly in the constructor
 - [ ] Make [SmoothMinGroup](src/main/things/compoundThings/SmoothMinGroup.java)s lerp every aspect of [MaterialData](src/main/materials/MaterialData.java)

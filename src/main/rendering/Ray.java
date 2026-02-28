@@ -26,7 +26,7 @@ public class Ray {
 	public final static int MAX_STEPS = 1000;
 	private final static double MAX_DIST = 1000;
 	private final static double MIN_DIST = .0001;
-	public final static double ESCAPE_EPSILON = .001;
+	private final static double ESCAPE_EPSILON = .01;
 	public final static double NORMAL_EPSILON = .01;
 
 	public static final int RECURSION_COUNT = 16;
@@ -122,7 +122,7 @@ public class Ray {
         Vector3 directionalLight = Vector3.ZERO;
 
         Set<DirectionalLightSource> directionalLights = scene.getDirectionalLights();
-        if (directionalLights.size() == 0) return totalLight.add(directionalLight);
+        if (directionalLights.isEmpty()) return totalLight.add(directionalLight);
         if (directionalLights.size() == 1) return totalLight.add(getDirectionalLight(directionalLights.iterator().next(), materialData));
 
         for (DirectionalLightSource lightSource : directionalLights) {
@@ -200,10 +200,7 @@ public class Ray {
 
 		stepFixedDistance(distanceValueBeforeMove);
 
-		double distanceValueAfterMove = scene.sdf(position);
-
-
-
+		double distanceValueAfterMove = scene.getDistanceFrom(position);
 
 		return false;
 	}

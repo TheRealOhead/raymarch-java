@@ -16,6 +16,7 @@ public class BallInField extends Scene {
 
 		add(new Plane(
 				new Vector3(0, -1, 0),
+                Vector3.ZERO,
 				Vector3.UP,
 				new CheckerBoard(
 						new SolidColor(new Color(140, 255, 0)),
@@ -25,6 +26,7 @@ public class BallInField extends Scene {
 
 		add(new Sphere(
 				new Vector3(0, 0, 8),
+                Vector3.ZERO,
 				1,
 				new SolidColor(Color.RED)
 		));

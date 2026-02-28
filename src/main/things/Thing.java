@@ -9,17 +9,25 @@ import java.util.HashSet;
 /**
  * A physical object represented by a signed distance function, position, and material
  */
-public abstract class Thing extends HashSet<Thing> implements HasSDF {
+public abstract class Thing extends HashSet<Thing> {
 	private final Vector3 position;
+    private final Vector3 rotation;
 
 	public Thing() {
-		this.position = Vector3.ZERO;
+		this(Vector3.ZERO, Vector3.ZERO);
 	}
+
+    public abstract double sdf(Vector3 position);
+
+    public final double getDistanceFrom(Vector3 position) {
+        return sdf(position.subtract(getPosition()).rotate(rotation.negate()));
+    }
 
 	public abstract Material getMaterial();
 
-	public Thing(Vector3 position) {
+	public Thing(Vector3 position, Vector3 rotation) {
 		this.position = position;
+        this.rotation = rotation;
 	}
 
 	/**

@@ -47,8 +47,8 @@ public class Scene extends CompoundThing {
 		return null;
 	}
 
-	public Scene(Vector3 position) {
-		super(position);
+	public Scene(Vector3 position, Vector3 rotation) {
+		super(position, rotation);
 	}
 
 	public void addDirectionalLight(DirectionalLightSource directionalLightSource) {
@@ -84,9 +84,9 @@ public class Scene extends CompoundThing {
 	}
 
 	public Vector3 getNormalAt(Vector3 position) {
-		double x = sdf(position.add(Vector3.EAST .scale(Ray.NORMAL_EPSILON)));
-		double y = sdf(position.add(Vector3.UP   .scale(Ray.NORMAL_EPSILON)));
-		double z = sdf(position.add(Vector3.NORTH.scale(Ray.NORMAL_EPSILON)));
+		double x = getDistanceFrom(position.add(Vector3.EAST .scale(Ray.NORMAL_EPSILON)));
+		double y = getDistanceFrom(position.add(Vector3.UP   .scale(Ray.NORMAL_EPSILON)));
+		double z = getDistanceFrom(position.add(Vector3.NORTH.scale(Ray.NORMAL_EPSILON)));
 		return new Vector3(x, y, z).normalize();
 	}
 

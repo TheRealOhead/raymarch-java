@@ -14,11 +14,11 @@ public class SmoothMinGroup extends CompoundThing {
 	private final double deviation;
 
 	public SmoothMinGroup(double deviation) {
-		this(Vector3.ZERO, deviation);
+		this(Vector3.ZERO, Vector3.ZERO, deviation);
 	}
 
-	public SmoothMinGroup(Vector3 position, double deviation) {
-		super(position);
+	public SmoothMinGroup(Vector3 position, Vector3 rotation, double deviation) {
+		super(position, rotation);
 		this.deviation = deviation;
 	}
 
@@ -45,7 +45,7 @@ public class SmoothMinGroup extends CompoundThing {
 	public double sdf(Vector3 position) {
 		LinkedList<Double> numbers = new LinkedList<>();
 		for (Thing thing : this) {
-			numbers.add(thing.sdf(position.subtract(getPosition())));
+			numbers.add(thing.getDistanceFrom(position));
 		}
 		return smoothMin(numbers);
 	}

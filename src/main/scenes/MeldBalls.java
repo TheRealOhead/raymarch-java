@@ -32,6 +32,7 @@ public class MeldBalls extends Scene {
 
 		add(new Plane(
 				new Vector3(0, -1, 0),
+                Vector3.ZERO,
 				Vector3.UP,
 				new CheckerBoard(
 						new SolidColor(new Color(101, 186, 23)),
@@ -49,17 +50,19 @@ public class MeldBalls extends Scene {
 				.9
 		);
 
-		SmoothMinGroup balls = new SmoothMinGroup(Vector3.ZERO, 0.6);
+		SmoothMinGroup balls = new SmoothMinGroup(0.6);
 		//World balls = new World();
 
 		balls.add(new Sphere(
 				new Vector3(Math.cos(progress * Math.PI * 2), 0, 8),
+                Vector3.ZERO,
 				1,
 				new SolidMaterial(reflectiveRed)
 		));
 
 		balls.add(new Sphere(
 				new Vector3(-Math.cos(progress * Math.PI * 2), 0, 8),
+                Vector3.ZERO,
 				1,
 				new SolidMaterial(reflectiveGreen)
 		));

@@ -29,6 +29,7 @@ public class WaterBall extends Scene {
 
 		add(new Plane(
 				new Vector3(3, 0, 0),
+                Vector3.ZERO,
 				Vector3.WEST,
 				new CheckerBoard(
 						new SolidColor(new Color(255, 0, 0)),
@@ -38,6 +39,7 @@ public class WaterBall extends Scene {
 
 		add(new Plane(
 				new Vector3(-3, 0, 0),
+                Vector3.ZERO,
 				Vector3.EAST,
 				new CheckerBoard(
 						new SolidColor(new Color(132, 0, 255)),
@@ -47,6 +49,7 @@ public class WaterBall extends Scene {
 
 		add(new Plane(
 				new Vector3(0, 6, 0),
+                Vector3.ZERO,
 				Vector3.DOWN,
 				new CheckerBoard(
 						new SolidColor(new Color(234, 234, 234)),
@@ -56,6 +59,7 @@ public class WaterBall extends Scene {
 
 		add(new Plane(
 				new Vector3(0, 0, 16),
+                Vector3.ZERO,
 				Vector3.SOUTH,
 				new CheckerBoard(
 						new SolidColor(new Color(0, 255, 149)),
@@ -68,12 +72,14 @@ public class WaterBall extends Scene {
 
 		water.add(new Plane(
 				new Vector3(0, -1, 0),
+                Vector3.ZERO,
 				Vector3.UP,
 				new Water(currentFrame)
 		));
 
 		water.add(new Sphere(
 				new Vector3(0.5, Math.sin(((double) currentFrame / numberOfFrames) * Math.PI * 2) * 2, 8),
+                Vector3.ZERO,
 						1,
 				new Water(currentFrame)
 		));

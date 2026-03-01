@@ -86,8 +86,8 @@ public class BallInBox extends Scene {
 		add(new Sphere(
 				new Vector3(0.5, Math.sin(((double) currentFrame / numberOfFrames) * Math.PI * 2) * 2, 8),
                 Vector3.ZERO,
-                1,
-				new SandedSteel()
+                false, 1,
+				new SolidMaterial(new MaterialData(Color.WHITE, Vector3.ZERO, .9, (double) currentFrame / getNumberOfFrames(), 1, 0))
 		));
 
 		addPointLightSource(

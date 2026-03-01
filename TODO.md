@@ -11,8 +11,10 @@
 - [X] Make things rotatable
 - [ ] Make things able to be joined and xor'd and all that
 - [ ] Add linear textures
+- [ ] Add refraction
+  - When a ray hits a refractive object, it can spawn a new ray. This child could treat the world as if the object it was travelling through was negative
 - [ ] Make scene building more consistent
-  - Good place to start is making a `build()` method instead of doing the building directly in the constructor
+    - Good place to start is making a `build()` method instead of doing the building directly in the constructor
 - [ ] Make [SmoothMinGroup](src/main/things/compoundThings/SmoothMinGroup.java)s lerp every aspect of [MaterialData](src/main/materials/MaterialData.java)
 - [ ] Make [Things](src/main/things/Thing.java) an interface
 - [ ] ~~Make [Vector](src/main/math/vectors/Vector3.java)s (2 & 3) inherit from a generic Vector class~~ I can't figure out how to this. It'd probably be less efficient, anyway

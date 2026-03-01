@@ -18,7 +18,7 @@ These rays can use the minimum of all the [Thing](src/main/things/Thing.java)'s 
 - Things
   - [ ] [Triangles](src/main/things/Triangle.java)
     - I'm having trouble implementing the SDF, I may need to use a different reference
-  - [ ] Cuboid
+  - [X] Cuboid
     - [ ] Beveled Cuboid
   - [ ] Cone
   - [ ] Cylinder

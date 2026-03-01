@@ -1,5 +1,6 @@
 package main.things.compoundThings;
 
+import main.materials.Material;
 import main.materials.MaterialData;
 import main.math.vectors.Vector3;
 import main.things.Thing;
@@ -14,7 +15,12 @@ public abstract class CompoundThing extends Thing {
 		super(position, rotation);
 	}
 
-	private Thing getClosestThing(Vector3 position) {
+    @Override
+    public Material getMaterial() {
+        return (position, rayDirection) -> getClosestThing(position).getMaterialData(position, rayDirection);
+    }
+
+	Thing getClosestThing(Vector3 position) {
 		Thing closestThingSoFar = null;
 		double closestThingSoFarDistance = 0;
 		for (Thing thing : this) {

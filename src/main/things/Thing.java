@@ -13,22 +13,29 @@ public abstract class Thing extends HashSet<Thing> {
 	private final Vector3 position;
     private final Vector3 rotation;
 
+    private final boolean inverted;
+
 	public Thing() {
 		this(Vector3.ZERO, Vector3.ZERO);
 	}
 
+    public Thing(Vector3 position, Vector3 rotation) {
+        this(position, rotation, false);
+    }
+
+    public Thing(Vector3 position, Vector3 rotation, boolean inverted) {
+        this.position = position;
+        this.rotation = rotation;
+        this.inverted = inverted;
+    }
+
     public abstract double sdf(Vector3 position);
 
     public final double getDistanceFrom(Vector3 position) {
-        return sdf(position.subtract(getPosition()).rotate(rotation.negate()));
+        return (inverted ? -1 : 1) * sdf(position.subtract(getPosition()).rotate(rotation.negate()));
     }
 
 	public abstract Material getMaterial();
-
-	public Thing(Vector3 position, Vector3 rotation) {
-		this.position = position;
-        this.rotation = rotation;
-	}
 
 	/**
 	 * @return Position of Thing

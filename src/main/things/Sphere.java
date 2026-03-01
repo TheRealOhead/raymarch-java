@@ -7,11 +7,11 @@ public class Sphere extends Thing {
 	private final double radius;
 	private final Material material;
 
-	public Sphere(Vector3 position, Vector3 rotation, double radius, Material material) {
-		super(position, rotation);
-		this.radius = radius;
-		this.material = material;
-	}
+    public Sphere(Vector3 position, Vector3 rotation, boolean inverted, double radius, Material material) {
+        super(position, rotation, false);
+        this.radius = radius;
+        this.material = material;
+    }
 
 	@Override
 	public double sdf(Vector3 position) {

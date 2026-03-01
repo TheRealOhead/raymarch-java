@@ -42,11 +42,6 @@ public class Scene extends CompoundThing {
 		super();
 	}
 
-	@Override
-	public Material getMaterial() {
-		return null;
-	}
-
 	public Scene(Vector3 position, Vector3 rotation) {
 		super(position, rotation);
 	}

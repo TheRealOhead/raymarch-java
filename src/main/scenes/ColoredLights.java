@@ -19,7 +19,7 @@ public class ColoredLights extends Scene {
 		add(new Sphere(
 				new Vector3(0, 0, 4),
                 Vector3.ZERO,
-				1,
+                false, 1,
 				new SolidColor(Color.GRAY)
 		));
 

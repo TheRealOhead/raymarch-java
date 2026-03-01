@@ -2,7 +2,6 @@ package main.scenes;
 
 import main.materials.CheckerBoard;
 import main.materials.Mirror;
-import main.materials.SandedSteel;
 import main.materials.SolidColor;
 import main.math.vectors.Vector3;
 import main.optics.PointLightSource;
@@ -80,7 +79,7 @@ public class MirrorFacingMirror extends Scene {
 		add(new Sphere(
 				new Vector3(1.5, -.5, 8),
                 Vector3.ZERO,
-                .5,
+                false, .5,
 				new SolidColor(Color.YELLOW)
 		));
 

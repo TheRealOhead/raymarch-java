@@ -28,12 +28,12 @@ public class SaveGIF {
 
         long start = System.nanoTime();
 
-		int totalThreads = 32;
+		int totalThreads = 64;
 		List<BufferedImage> images = new LinkedList<>();
 		for (int i = 0; i < scene.getNumberOfFrames(); i++) {
 			FrameTracker frameTracker = new FrameTracker();
 			scene = Main.getDefaultScene(i);
-			BufferedImage image = Main.prepareBufferedImage(256, 256);
+			BufferedImage image = Main.prepareBufferedImage(512, 512);
 			images.add(image);
 
 			Scene finalScene = scene;

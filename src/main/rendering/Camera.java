@@ -10,21 +10,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
+
+import static main.rendering.Camera.PerspectiveMode.LINEAR;
+import static main.rendering.Camera.PerspectiveMode.RADIAL;
 
 public class Camera {
 	Vector3 position;
 	Vector3 rotation;
 	double focalLength;
 	Scene scene = null;
+    private final PerspectiveMode perspectiveMode;
 
-	public Camera(Vector3 position, Vector3 rotation, double focalLength) {
+    public Camera(Vector3 position, Vector3 rotation) {
+        this.position = position;
+        this.rotation = rotation;
+        this.perspectiveMode = RADIAL;
+    }
+
+    public Camera(Vector3 position, Vector3 rotation, double focalLength) {
 		this.position = position;
 		this.rotation = rotation;
 		this.focalLength = focalLength;
+        this.perspectiveMode = LINEAR;
 	}
+
+    public enum PerspectiveMode {
+        LINEAR,
+        RADIAL
+    }
 
 	public void setWorld(Scene scene) {
 		this.scene = scene;
@@ -32,7 +47,14 @@ public class Camera {
 
 	private FragmentData captureFragment(Vector2 uv) {
 
-		Vector3 direction = uv.toVector3(focalLength);
+
+        Vector3 direction = switch (perspectiveMode) {
+            case LINEAR -> uv.toVector3(focalLength);
+            case RADIAL -> uv.multiply(new Vector2(
+                Math.PI * 4,
+                Math.PI * 2
+            ));
+        };
 
 		direction = direction.rotate(rotation);
 
@@ -54,88 +76,11 @@ public class Camera {
 	}
 
 	FragmentData getDataAt(Vector2 screenPosition, Vector2 size) {
-		Vector2 uv = screenPosition.scale(1 / (size.x)).subtract(new Vector3(.5)).toVector2();
+		Vector2 uv = screenPosition.scale(1 / (size.y)).subtract(new Vector3(.5)).toVector2();
 
 		uv = new Vector2(uv.x, -uv.y);
 
 		return captureFragment(uv);
-	}
-
-	/**
-	 * A generic interface for drawing pixels to something. Could be an image buffer, a graphics context, whatever
-	 */
-	private interface PixelWriter {
-		void run(FragmentData data, int x, int y);
-	}
-
-	private static class FragmentJob {
-		Vector2 location;
-        Vector2 size;
-		FragmentJob(Vector2 location, Vector2 size) {
-			this.location = location;
-			this.size = size;
-		}
-	}
-
-    /**
-	 * Takes a set of coordinates that has yet to be rendered, and renders it!
-	 */
-	private class FragmentWorker extends Thread {
-		private final int totalFragments;
-		private final ConcurrentLinkedDeque<FragmentJob> queue;
-		private final PixelWriter writer;
-		private static int numberOfThreads;
-		private final int id;
-		private final Color debugColor = new Color((int) (Math.random() * 0xFFFFFF));
-
-		public FragmentWorker(String name, ConcurrentLinkedDeque<FragmentJob> fragmentQueue, PixelWriter pixelWriter) {
-			super(name);
-
-			this.queue = fragmentQueue;
-			this.writer = pixelWriter;
-
-			id = numberOfThreads;
-			numberOfThreads++;
-
-			this.totalFragments = queue.size();
-		}
-
-		@Override
-		public void run() {
-			// As long as there are fragments to render, keep going
-			while (!queue.isEmpty()) {
-				FragmentJob job;
-				try {
-					job = queue.pop();
-				} catch (NoSuchElementException e) {
-					// Someone else got to it first. That was fast!
-					return;
-				}
-
-				long startTime = System.nanoTime();
-				FragmentData data = getDataAt(job.location, job.size);
-				long endTime = System.nanoTime();
-
-				double timeTook = endTime - startTime;
-
-                data = new FragmentData(
-                        data.color(),
-                        data.albedo(),
-                        data.depth(),
-                        data.normal(),
-                        this.debugColor,
-                        new Vector3(10000 / timeTook).asColor(),
-                        data.stepCount(),
-                        data.normalModifications()
-                );
-
-				writer.run(
-						data,
-						(int) job.location.x,
-						(int) job.location.y
-				);
-			}
-		}
 	}
 
 	private void addPixelsByPowersOf2(ArrayList<FragmentJob> jobsArrayList, Vector2 size) {
@@ -257,7 +202,7 @@ public class Camera {
             ConcurrentLinkedDeque<FragmentJob> jobQueue = new ConcurrentLinkedDeque<>(jobsArrayList);
 
             for (int i = 0; i < threadCount; i++) {
-                new FragmentWorker("Fragment-Renderer-" + (i + 1), jobQueue, pixelWriter).start();
+                new FragmentWorker(this, "Fragment-Renderer-" + (i + 1), jobQueue, pixelWriter).start();
             }
 
 

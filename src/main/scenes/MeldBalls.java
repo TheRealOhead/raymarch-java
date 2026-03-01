@@ -56,14 +56,14 @@ public class MeldBalls extends Scene {
 		balls.add(new Sphere(
 				new Vector3(Math.cos(progress * Math.PI * 2), 0, 8),
                 Vector3.ZERO,
-				1,
+                false, 1,
 				new SolidMaterial(reflectiveRed)
 		));
 
 		balls.add(new Sphere(
 				new Vector3(-Math.cos(progress * Math.PI * 2), 0, 8),
                 Vector3.ZERO,
-				1,
+                false, 1,
 				new SolidMaterial(reflectiveGreen)
 		));
 

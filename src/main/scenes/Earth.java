@@ -20,7 +20,7 @@ public class Earth extends Scene {
 
     static {
         try {
-            earthImage = ImageIO.read(new File("./images/earth.jpg"));
+            earthImage = ImageIO.read(new File("./images/steven.jpg"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -38,9 +38,9 @@ public class Earth extends Scene {
 	public Earth(int frameNumber) throws IOException {
 
 		add(new Sphere(
-				new Vector3(0, 0, 5),
+				new Vector3(0, 0, 3),
                 Vector3.ZERO,
-				1,
+                false, 1,
 				new RadialTexture(earthImage, new Vector2(((double) frameNumber / getNumberOfFrames()), 0))
 		));
 

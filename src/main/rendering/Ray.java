@@ -29,8 +29,8 @@ public class Ray {
 	private final static double ESCAPE_EPSILON = .01;
 	public final static double NORMAL_EPSILON = .01;
 
-	public static final int RECURSION_COUNT = 16;
-	private final static int RAYS_PER_REFLECTION = 200;
+	public static final int RECURSION_COUNT = 1;
+	private final static int RAYS_PER_REFLECTION = 20;
 
 
 	public Ray(Vector3 position, Vector3 direction, Scene scene) {

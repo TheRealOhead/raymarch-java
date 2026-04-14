@@ -17,18 +17,24 @@ import java.util.Set;
 /**
  * A collection of {@link Thing}s
  */
-public class Scene extends CompoundThing {
+public abstract class Scene extends CompoundThing {
 
-	public int currentFrame = 0;
-	public static int numberOfFrames = 1;
+	public Scene() {
+		this(0);
+	}
 
 	public Scene(int currentFrame) {
-		this.currentFrame = currentFrame;
+		super();
+		build(currentFrame);
 	}
 
-	public int getNumberOfFrames() {
-		return numberOfFrames;
-	}
+	/**
+	 * Add Things to the scene here. Must include a camera
+	 * @param currentFrame Frame number to build
+	 */
+	public abstract void build(int currentFrame);
+
+	public abstract int getNumberOfFrames();
 
 	Set<DirectionalLightSource> directionalLightSources = new HashSet<>();
 
@@ -37,14 +43,6 @@ public class Scene extends CompoundThing {
 	Material skyMaterial = Sky.DEFAULT;
 
 	Set<PointLightSource> pointLightSources = new HashSet<>();
-
-	public Scene() {
-		super();
-	}
-
-	public Scene(Vector3 position, Vector3 rotation) {
-		super(position, rotation);
-	}
 
 	public void addDirectionalLight(DirectionalLightSource directionalLightSource) {
 		this.directionalLightSources.add(directionalLightSource);

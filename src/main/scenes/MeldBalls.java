@@ -15,19 +15,19 @@ import main.things.compoundThings.Scene;
 import java.awt.*;
 
 public class MeldBalls extends Scene {
-    @Override
-    public int getNumberOfFrames() {
-        return 32;
-    }
+	public MeldBalls(int frameNumber) {
+		super(frameNumber);
+	}
 
-    public MeldBalls() {
-        this(0);
-    }
+	@Override
+	public int getNumberOfFrames() {
+		return 32;
+	}
 
-	public MeldBalls(int currentFrame) {
-		super(currentFrame);
+	@Override
+	public void build(int frameNumber) {
 
-        double progress = (double) currentFrame / getNumberOfFrames();
+        double progress = (double) frameNumber / getNumberOfFrames();
 
 
 		add(new Plane(

@@ -13,7 +13,7 @@ public class PerformanceTest {
      * @return Time took in nanoseconds
      */
     private static long render(int numThreads) throws IOException, ExecutionException, InterruptedException {
-        Scene scene = new Ocean();
+        Scene scene = new Ocean(0);
 
         long start = System.nanoTime();
         scene.getCamera().draw(Main.prepareBufferedImage(1024, 1024), numThreads).get();

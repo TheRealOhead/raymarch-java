@@ -14,7 +14,16 @@ import java.awt.*;
 
 public class ColoredLights extends Scene {
 	public ColoredLights(int frameNumber) {
-        super(frameNumber);
+		super(frameNumber);
+	}
+
+	@Override
+	public int getNumberOfFrames() {
+		return 1;
+	}
+
+	@Override
+	public void build(int frameNumber) {
 
 		add(new Sphere(
 				new Vector3(0, 0, 4),
@@ -45,7 +54,7 @@ public class ColoredLights extends Scene {
         add(new Cuboid(
                 new Vector3(3, -3, 7),
                 new Vector3(0, Math.PI * 1.25, 0),
-                new Vector3(2, 1, 1),
+				false, new Vector3(2, 1, 1),
                 new Mirror()
         ));
 

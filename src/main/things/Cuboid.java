@@ -1,18 +1,16 @@
 package main.things;
 
 import main.materials.Material;
-import main.materials.MaterialData;
 import main.math.vectors.Vector2;
 import main.math.vectors.Vector3;
-import main.rendering.Camera;
 
 public class Cuboid extends Thing {
 
     private final Material material;
     private final Vector3 dimensions;
 
-    public Cuboid(Vector3 position, Vector3 rotation, Vector3 dimensions, Material material) {
-        super(position, rotation);
+    public Cuboid(Vector3 position, Vector3 rotation, boolean inverted, Vector3 dimensions, Material material) {
+        super(position, rotation, inverted);
         this.material = material;
         this.dimensions = dimensions;
     }

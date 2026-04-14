@@ -5,6 +5,8 @@ import main.gui.Canvas;
 import main.math.vectors.Vector2;
 import main.rendering.Camera;
 import main.scenes.BallInBox;
+import main.scenes.ConjunctionDemo;
+import main.scenes.SubtractionDemo;
 import main.things.compoundThings.Scene;
 
 import javax.swing.*;
@@ -16,7 +18,7 @@ import java.util.TimerTask;
 public class Main {
 
     public static Scene getDefaultScene(int frameNumber) throws IOException {
-        return new BallInBox(frameNumber);
+        return new ConjunctionDemo(frameNumber);
     }
 
     public static Scene getDefaultScene() throws IOException {

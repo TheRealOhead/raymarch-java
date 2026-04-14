@@ -16,14 +16,17 @@ import java.awt.*;
 
 public class WaterBall extends Scene {
 
-	public WaterBall() {
-		this(0);
+	public WaterBall(int frameNumber) {
+		super(frameNumber);
 	}
 
-	public WaterBall(int currentFrame) {
-		super(currentFrame);
+	@Override
+	public int getNumberOfFrames() {
+		return 64;
+	}
 
-		WaterBall.numberOfFrames = 64;
+	@Override
+	public void build(int frameNumber) {
 
 
 
@@ -74,14 +77,14 @@ public class WaterBall extends Scene {
 				new Vector3(0, -1, 0),
                 Vector3.ZERO,
 				Vector3.UP,
-				new Water(currentFrame)
+				new Water(frameNumber)
 		));
 
 		water.add(new Sphere(
-				new Vector3(0.5, Math.sin(((double) currentFrame / numberOfFrames) * Math.PI * 2) * 2, 8),
+				new Vector3(0.5, Math.sin(((double) frameNumber / getNumberOfFrames()) * Math.PI * 2) * 2, 8),
                 Vector3.ZERO,
                 false, 1,
-				new Water(currentFrame)
+				new Water(frameNumber)
 		));
 
 		addPointLightSource(

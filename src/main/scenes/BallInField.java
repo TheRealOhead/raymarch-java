@@ -11,9 +11,18 @@ import main.things.compoundThings.Scene;
 import java.awt.*;
 
 public class BallInField extends Scene {
+
 	public BallInField(int frameNumber) {
 		super(frameNumber);
+	}
 
+	@Override
+	public int getNumberOfFrames() {
+		return 1;
+	}
+
+	@Override
+	public void build(int frameNumber) {
 		add(new Plane(
 				new Vector3(0, -1, 0),
                 Vector3.ZERO,

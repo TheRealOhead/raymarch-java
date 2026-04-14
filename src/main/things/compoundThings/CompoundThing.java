@@ -3,9 +3,13 @@ package main.things.compoundThings;
 import main.materials.Material;
 import main.materials.MaterialData;
 import main.math.vectors.Vector3;
+import main.things.Cuboid;
 import main.things.Thing;
 
-public abstract class CompoundThing extends Thing {
+public class CompoundThing extends Thing {
+
+	private CompoundThing subtraction = null;
+	private CompoundThing conjunction = null;
 
 	public CompoundThing() {
 		super();
@@ -13,6 +17,20 @@ public abstract class CompoundThing extends Thing {
 
 	public CompoundThing(Vector3 position, Vector3 rotation) {
 		super(position, rotation);
+	}
+
+	public void addSubtrahend(Thing thing) {
+		if (subtraction == null)
+			subtraction = new CompoundThing();
+
+		subtraction.add(thing);
+	}
+
+	public void addConjunction(Thing thing) {
+		if (conjunction == null)
+			conjunction = new CompoundThing();
+
+		conjunction.add(thing);
 	}
 
     @Override
@@ -44,7 +62,21 @@ public abstract class CompoundThing extends Thing {
 
 	@Override
 	public double sdf(Vector3 position) {
-		return getClosestThing(position).getDistanceFrom(position);
+		double dist = getClosestThing(position).getDistanceFrom(position);
+
+		if (subtraction != null && !subtraction.isEmpty())
+			dist = Math.max(
+					dist,
+					-subtraction.getClosestThing(position).getDistanceFrom(position)
+			);
+
+		if (conjunction != null && !conjunction.isEmpty())
+			dist = Math.max(
+					dist,
+					conjunction.getClosestThing(position).getDistanceFrom(position)
+			);
+
+		return dist;
 	}
 
 	@Override

@@ -23,24 +23,28 @@ public class Ocean extends Scene {
         }
     }
 
-    public Ocean() throws IOException {
-		this(0);
+	public Ocean(int frameNumber) {
+		super(frameNumber);
 	}
 
-	public Ocean(int currentFrame) throws IOException {
-		super(currentFrame);
-		numberOfFrames = 128;
+	@Override
+	public int getNumberOfFrames() {
+		return 128;
+	}
+
+	@Override
+	public void build(int frameNumber) {
 
 		add(new Plane(
 				new Vector3(0, -2, 0),
                 Vector3.ZERO,
 				Vector3.UP,
-				new Water(1, .5, 10, currentFrame)
+				new Water(1, .5, 10, frameNumber)
 		));
 
 		setCamera(new Camera(
 				Vector3.ZERO,
-				Vector3.YAW.scale((double) currentFrame / numberOfFrames),
+				Vector3.YAW.scale((double) frameNumber / getNumberOfFrames()),
 				1
 		));
 

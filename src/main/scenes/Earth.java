@@ -20,22 +20,23 @@ public class Earth extends Scene {
 
     static {
         try {
-            earthImage = ImageIO.read(new File("./images/steven.jpg"));
+            earthImage = ImageIO.read(new File("./images/earth.jpg"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
+	public Earth(int frameNumber) {
+		super(frameNumber);
+	}
+
+	@Override
 	public int getNumberOfFrames() {
 		return 32;
 	}
 
-    public Earth() throws IOException {
-        this(0);
-    }
-
-	public Earth(int frameNumber) throws IOException {
+	@Override
+	public void build(int frameNumber) {
 
 		add(new Sphere(
 				new Vector3(0, 0, 3),

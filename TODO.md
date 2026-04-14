@@ -9,12 +9,14 @@
     - I ended up using a library for 4D noise
 - [X] Allow multiple directional lights per scene
 - [X] Make things rotatable
+- [X] Make scene building more consistent
+  - Good place to start is making a `build()` method instead of doing the building directly in the constructor
+- [X] Make [Things](src/main/things/Thing.java) abstract
 - [ ] Make things able to be joined and xor'd and all that
+    - [X] Subtraction
+    - [ ] Conjunction
 - [ ] Add linear textures
 - [ ] Add refraction
-  - When a ray hits a refractive object, it can spawn a new ray. This child could treat the world as if the object it was travelling through was negative
-- [ ] Make scene building more consistent
-    - Good place to start is making a `build()` method instead of doing the building directly in the constructor
+      - When a ray hits a refractive object, it can spawn a new ray. This child could treat the world as if the object it was traveling through was negative
 - [ ] Make [SmoothMinGroup](src/main/things/compoundThings/SmoothMinGroup.java)s lerp every aspect of [MaterialData](src/main/materials/MaterialData.java)
-- [ ] Make [Things](src/main/things/Thing.java) an interface
 - [ ] ~~Make [Vector](src/main/math/vectors/Vector3.java)s (2 & 3) inherit from a generic Vector class~~ I can't figure out how to this. It'd probably be less efficient, anyway

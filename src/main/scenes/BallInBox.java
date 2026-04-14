@@ -11,17 +11,17 @@ import java.awt.*;
 
 public class BallInBox extends Scene {
 
-	public BallInBox() {
-		this(0);
+	public BallInBox(int frameNumber) {
+		super(frameNumber);
 	}
 
-	public BallInBox(int currentFrame) {
-		super(currentFrame);
+	@Override
+	public int getNumberOfFrames() {
+		return 64;
+	}
 
-		BallInBox.numberOfFrames = 64;
-
-
-
+	@Override
+	public void build(int currentFrame) {
 		add(new Plane(
 				new Vector3(3, 0, 0),
                 Vector3.ZERO,
@@ -84,10 +84,10 @@ public class BallInBox extends Scene {
         ));
 
 		add(new Sphere(
-				new Vector3(0.5, Math.sin(((double) currentFrame / numberOfFrames) * Math.PI * 2) * 2, 8),
+				new Vector3(0.5, 0, 8),
                 Vector3.ZERO,
                 false, 1,
-				new SolidMaterial(new MaterialData(Color.WHITE, Vector3.ZERO, .9, (double) currentFrame / getNumberOfFrames(), 1, 0))
+				new SandedSteel()
 		));
 
 		addPointLightSource(

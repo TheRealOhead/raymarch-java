@@ -14,12 +14,17 @@ import java.awt.*;
 
 public class MirrorFacingMirror extends Scene {
 
-	public MirrorFacingMirror() {
-		this(0);
+	public MirrorFacingMirror(int frameNumber) {
+		super(frameNumber);
 	}
 
-	public MirrorFacingMirror(int currentFrame) {
-		super(currentFrame);
+	@Override
+	public int getNumberOfFrames() {
+		return 1;
+	}
+
+	@Override
+	public void build(int frameNumber) {
 
 		add(new Plane(
 				new Vector3(3, 0, 0),
